@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             researchContent: "Currently pursuing a Master by Research focusing on Autism Caregiver Support through cluster analysis and statistical modeling.",
             languagesTitle: "Languages",
             languagesContent: "Actively mastering multiple languages including Korean, Mandarin, and Japanese to expand academic and cultural horizons.",
+            connectTitle: "Connect With Me",
             modalTitle: "Welcome to the Hub",
             modalDesc: "Please enter your name to personalize your experience.",
             startBtn: "Get Started",
@@ -73,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             researchContent: "Kini sedang mengikuti Master secara Penyelidikan dengan fokus pada Sokongan Penjaga Autism melalui analisis kelompok dan pemodelan statistik.",
             languagesTitle: "Bahasa",
             languagesContent: "Aktif menguasai pelbagai bahasa termasuk Korea, Mandarin, dan Jepun untuk meluaskan ufuk akademik dan budaya.",
+            connectTitle: "Hubungi Saya",
             modalTitle: "Selamat Datang ke Hab",
             modalDesc: "Sila masukkan nama anda untuk memperibadikan pengalaman anda.",
             startBtn: "Mula Sekarang",
@@ -100,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hours >= 12 && hours < 18) greetingBase = t.greetings[1];
         else if (hours >= 18 || hours < 5) greetingBase = t.greetings[2];
         
-        // If we are on about.html, heroTitle might just say "About Me"
         const isAboutPage = window.location.pathname.includes('about.html');
         if (heroTitle) {
             if (isAboutPage) {

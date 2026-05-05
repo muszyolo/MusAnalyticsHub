@@ -406,6 +406,45 @@ nav a.active::after {
     color: var(--text-muted);
 }
 
+/* Social Media Buttons */
+.social-grid {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+}
+
+.social-btn:hover {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.social-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.social-btn:hover svg {
+    transform: scale(1.2);
+}
+
 /* Welcome Modal */
 .welcome-overlay {
     position: fixed;
