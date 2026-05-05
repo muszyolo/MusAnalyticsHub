@@ -35,7 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
             trackHealth: "Track Health",
             quickNotes: "Quick Notes",
             notesPlaceholder: "Write any general thoughts or reminders here...",
-            aboutContent: "I am an academic researcher focused on bridging the gap between data science and social impact. This Hub serves as my personal ecosystem for tracking thesis progress, mastering new languages, and maintaining physical well-being through structured analytics.",
+            aboutHeroDesc: "Researcher, Data Scientist, and Lifelong Learner.",
+            myVision: "My Vision",
+            visionContent: "To bridge the gap between complex data analysis and human-centric social impact, specifically in the fields of caregiver support and neurodiversity.",
+            researchFocus: "Research Focus",
+            researchContent: "Currently pursuing a Master by Research focusing on Autism Caregiver Support through cluster analysis and statistical modeling.",
+            languagesTitle: "Languages",
+            languagesContent: "Actively mastering multiple languages including Korean, Mandarin, and Japanese to expand academic and cultural horizons.",
             modalTitle: "Welcome to the Hub",
             modalDesc: "Please enter your name to personalize your experience.",
             startBtn: "Get Started",
@@ -60,7 +66,13 @@ document.addEventListener('DOMContentLoaded', () => {
             trackHealth: "Jejak Kesihatan",
             quickNotes: "Nota Pantas",
             notesPlaceholder: "Tulis sebarang fikiran atau peringatan am di sini...",
-            aboutContent: "Saya adalah seorang penyelidik akademik yang fokus pada merapatkan jurang antara sains data dan impak sosial. Hub ini berfungsi sebagai ekosistem peribadi saya untuk menjejak kemajuan tesis, menguasai bahasa baru, dan mengekalkan kesejahteraan fizikal melalui analitik berstruktur.",
+            aboutHeroDesc: "Penyelidik, Saintis Data, dan Pelajar Sepanjang Hayat.",
+            myVision: "Visi Saya",
+            visionContent: "Untuk merapatkan jurang antara analisis data yang kompleks dan impak sosial yang berpusatkan manusia, khususnya dalam bidang sokongan penjaga dan neurodiverisiti.",
+            researchFocus: "Fokus Penyelidikan",
+            researchContent: "Kini sedang mengikuti Master secara Penyelidikan dengan fokus pada Sokongan Penjaga Autism melalui analisis kelompok dan pemodelan statistik.",
+            languagesTitle: "Bahasa",
+            languagesContent: "Aktif menguasai pelbagai bahasa termasuk Korea, Mandarin, dan Jepun untuk meluaskan ufuk akademik dan budaya.",
             modalTitle: "Selamat Datang ke Hab",
             modalDesc: "Sila masukkan nama anda untuk memperibadikan pengalaman anda.",
             startBtn: "Mula Sekarang",
@@ -88,7 +100,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hours >= 12 && hours < 18) greetingBase = t.greetings[1];
         else if (hours >= 18 || hours < 5) greetingBase = t.greetings[2];
         
-        if (heroTitle) heroTitle.textContent = `${greetingBase}, ${name || 'Mus'}`;
+        // If we are on about.html, heroTitle might just say "About Me"
+        const isAboutPage = window.location.pathname.includes('about.html');
+        if (heroTitle) {
+            if (isAboutPage) {
+                heroTitle.textContent = t.about;
+            } else {
+                heroTitle.textContent = `${greetingBase}, ${name || 'Mus'}`;
+            }
+        }
     };
 
     const toggleAppLanguage = () => {
@@ -224,43 +244,47 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(card);
     });
 
-    // Smooth Scroll & Active State Toggle
+    // Smooth Scroll & Navigation State
     document.querySelectorAll('nav a').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
-            if (href.startsWith('#')) {
-                e.preventDefault();
-                const target = document.querySelector(href === '#' ? '.hero' : href);
-                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            if (href.startsWith('#') || href.includes('#')) {
+                const targetId = href.split('#')[1] || 'hero';
+                const target = document.getElementById(targetId) || document.querySelector('.hero');
+                if (target && window.location.pathname.includes('index.html')) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
             }
-            
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            this.classList.add('active');
         });
     });
 
-    // Scroll Spy for Nav
-    const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const id = entry.target.getAttribute('id');
-                document.querySelectorAll('nav a').forEach(a => {
-                    const href = a.getAttribute('href');
-                    a.classList.remove('active');
-                    if (href === `#${id}`) {
-                        a.classList.add('active');
-                    } else if (id === 'hero' && (href === '#' || href === '#hero')) {
-                        a.classList.add('active');
-                    }
-                });
-            }
-        });
-    }, { threshold: 0.5 });
+    // Scroll Spy (Only on index.html)
+    if (window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('MusAnalyticsHub/')) {
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('nav a').forEach(a => {
+                        const href = a.getAttribute('href');
+                        a.classList.remove('active');
+                        if (href === `#${id}`) {
+                            a.classList.add('active');
+                        } else if (id === 'hero' && (href === '#' || href === '#hero' || href === 'index.html')) {
+                            a.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
 
-    document.querySelectorAll('section[id]').forEach(section => scrollObserver.observe(section));
-    const heroSection = document.querySelector('.hero');
-    if (heroSection) {
-        heroSection.id = 'hero';
-        scrollObserver.observe(heroSection);
+        document.querySelectorAll('section[id]').forEach(section => scrollObserver.observe(section));
+        const heroSection = document.querySelector('.hero');
+        if (heroSection) {
+            heroSection.id = 'hero';
+            scrollObserver.observe(heroSection);
+        }
     }
 });
