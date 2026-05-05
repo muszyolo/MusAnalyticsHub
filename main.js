@@ -73,9 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const key = el.getAttribute('data-tr');
             if (t[key]) el.textContent = t[key];
         });
-        nameInput.placeholder = t.placeholder;
-        hubNotes.placeholder = t.notesPlaceholder;
-        langToggleBtn.textContent = appLanguage === 'EN' ? 'EN | BM' : 'BM | EN';
+        if (nameInput) nameInput.placeholder = t.placeholder;
+        if (hubNotes) hubNotes.placeholder = t.notesPlaceholder;
+        if (langToggleBtn) langToggleBtn.textContent = appLanguage === 'EN' ? 'EN | BM' : 'BM | EN';
         updateGreeting(localStorage.getItem('musHub_userName'));
     };
 
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hours >= 12 && hours < 18) greetingBase = t.greetings[1];
         else if (hours >= 18 || hours < 5) greetingBase = t.greetings[2];
         
-        heroTitle.textContent = `${greetingBase}, ${name || 'Mus'}`;
+        if (heroTitle) heroTitle.textContent = `${greetingBase}, ${name || 'Mus'}`;
     };
 
     const toggleAppLanguage = () => {
@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateViewIcon = () => {
+        if (!viewIcon) return;
         const isDesktop = document.body.classList.contains('desktop-mode');
         if (isDesktop) {
             viewIcon.innerHTML = `<rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line>`;
@@ -122,9 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize
     if (storedName) {
         updateGreeting(storedName);
-        welcomeOverlay.classList.add('hidden');
+        if (welcomeOverlay) welcomeOverlay.classList.add('hidden');
     } else {
-        welcomeOverlay.classList.remove('hidden');
+        if (welcomeOverlay) welcomeOverlay.classList.remove('hidden');
     }
 
     if (localStorage.getItem('musHub_view') === 'desktop') {
@@ -132,37 +133,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Notes Persistence
-    hubNotes.value = localStorage.getItem('musHub_generalNotes') || "";
-    hubNotes.addEventListener('input', (e) => {
-        localStorage.setItem('musHub_generalNotes', e.target.value);
-    });
+    if (hubNotes) {
+        hubNotes.value = localStorage.getItem('musHub_generalNotes') || "";
+        hubNotes.addEventListener('input', (e) => {
+            localStorage.setItem('musHub_generalNotes', e.target.value);
+        });
+    }
 
     updateViewIcon();
     applyTranslations();
 
     // Event Listeners
-    langToggleBtn.addEventListener('click', toggleAppLanguage);
-    viewModeBtn.addEventListener('click', toggleViewMode);
+    if (langToggleBtn) langToggleBtn.addEventListener('click', toggleAppLanguage);
+    if (viewModeBtn) viewModeBtn.addEventListener('click', toggleViewMode);
 
-    startBtn.addEventListener('click', () => {
-        const name = nameInput.value.trim();
-        if (name) {
-            localStorage.setItem('musHub_userName', name);
-            localStorage.setItem('userName', name); // Sync for sub-modules
-            updateGreeting(name);
-            welcomeOverlay.classList.add('hidden');
-        } else {
-            nameInput.style.borderColor = '#ff4444';
-            setTimeout(() => nameInput.style.borderColor = '', 1000);
-        }
-    });
+    if (startBtn) {
+        startBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name) {
+                localStorage.setItem('musHub_userName', name);
+                localStorage.setItem('userName', name);
+                updateGreeting(name);
+                if (welcomeOverlay) welcomeOverlay.classList.add('hidden');
+            } else {
+                nameInput.style.borderColor = '#ff4444';
+                setTimeout(() => nameInput.style.borderColor = '', 1000);
+            }
+        });
+    }
 
-    nameInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') startBtn.click();
-    });
+    if (nameInput) {
+        nameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') startBtn.click();
+        });
+    }
 
     // Clock Widget
     const updateClock = () => {
+        if (!clockWidget) return;
         const now = new Date();
         const timeStr = now.toLocaleTimeString(appLanguage === 'EN' ? 'en-US' : 'ms-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
         clockWidget.innerHTML = `<span>🕒</span> ${timeStr}`;
@@ -181,10 +189,11 @@ document.addEventListener('DOMContentLoaded', () => {
             let icon = '☀️';
             if (code > 0) icon = '☁️';
             if (code > 50) icon = '🌧️';
-            weatherWidget.innerHTML = `<span>${icon}</span> ${temp}°C`;
+            if (weatherWidget) weatherWidget.innerHTML = `<span>${icon}</span> ${temp}°C`;
         } catch (error) {
-            weatherWidget.innerHTML = `<span>☁️</span> 28°C`;
-            document.body.classList.add('weather-clear');
+            console.error("Weather fetch failed:", error);
+            if (weatherWidget) weatherWidget.innerHTML = `<span>☁️</span> 28°C`;
+            updateWeatherBackground(0);
         }
     };
 
