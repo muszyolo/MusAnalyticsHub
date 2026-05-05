@@ -1,6 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Component Injection ---
-    const injectWeatherElements = () => {
+    // --- Shared Component Injection (Weather & Solat) ---
+    const injectSharedComponents = () => {
+        // Weather Overlay
+        if (!document.querySelector('.weather-overlay')) {
+            const overlay = document.createElement('div');
+            overlay.className = 'weather-overlay';
+            overlay.innerHTML = `
+                <div id="rain-container" class="rain-overlay"></div>
+                <div id="lightning-flash" class="lightning-overlay"></div>
+                <div class="cloud" style="top: 10%; width: 300px; height: 150px; animation-duration: 40s;"></div>
+                <div class="cloud" style="top: 40%; width: 450px; height: 200px; animation-duration: 65s; animation-delay: -10s;"></div>
+            `;
+            document.body.prepend(overlay);
+        }
+
+        // Weather Details Card
         if (!document.getElementById('weather-details')) {
             const card = document.createElement('div');
             card.id = 'weather-details';
@@ -21,23 +35,29 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.appendChild(card);
         }
 
-        if (!document.querySelector('.weather-overlay')) {
-            const overlay = document.createElement('div');
-            overlay.className = 'weather-overlay';
-            overlay.innerHTML = `
-                <div id="rain-container" class="rain-overlay"></div>
-                <div id="lightning-flash" class="lightning-overlay"></div>
-                <div class="cloud" style="top: 10%; width: 300px; height: 150px; animation-duration: 40s;"></div>
-                <div class="cloud" style="top: 40%; width: 450px; height: 200px; animation-duration: 65s; animation-delay: -10s;"></div>
-            `;
-            document.body.prepend(overlay);
+        // Solat Widget & Branding Restructure
+        const header = document.querySelector('header');
+        if (header && !document.querySelector('.branding-group')) {
+            const branding = header.querySelector('.branding');
+            if (branding) {
+                const group = document.createElement('div');
+                group.className = 'branding-group';
+                
+                const solat = document.createElement('div');
+                solat.id = 'solat-widget';
+                solat.className = 'solat-widget';
+                solat.innerHTML = `<span>🕌</span> <div style="display: flex; flex-direction: column;"><span class="solat-label">Solat</span><span id="next-prayer">--:--</span></div>`;
+                
+                group.appendChild(solat);
+                branding.parentNode.insertBefore(group, branding);
+                group.appendChild(branding);
+            }
         }
     };
-    injectWeatherElements();
+    injectSharedComponents();
 
     // Elements
     const heroTitle = document.getElementById('hero-title');
-    const heroDesc = document.getElementById('hero-desc');
     const welcomeOverlay = document.getElementById('welcome-overlay');
     const nameInput = document.getElementById('user-name-input');
     const startBtn = document.getElementById('start-btn');
@@ -47,13 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewModeBtn = document.getElementById('view-mode-btn');
     const viewIcon = document.getElementById('view-icon');
     const hubNotes = document.getElementById('hub-notes');
-    const rainContainer = document.getElementById('rain-container');
-    const lightningFlash = document.getElementById('lightning-flash');
-    const weatherDetails = document.getElementById('weather-details');
+    const nextPrayerEl = document.getElementById('next-prayer');
 
     // State
     let appLanguage = localStorage.getItem('musHub_lang') || 'EN';
-    let viewMode = localStorage.getItem('musHub_view') || 'mobile';
     const storedName = localStorage.getItem('musHub_userName');
 
     const translations = {
@@ -101,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             healthTitle: "Kesihatan & Nutrisi",
             healthDesc: "Optimumkan kesejahteraan fizikal anda dengan penjejakan nutrisi dan rutin senaman peribadi.",
             trackHealth: "Jejak Kesihatan",
-            quickNotes: "Nota Pantas",
+            quickNotes: "Nota Paling Penting",
             notesPlaceholder: "Tulis sebarang fikiran atau peringatan am di sini...",
             aboutHeroDesc: "Penyelidik, Saintis Data, dan Pelajar Sepanjang Hayat.",
             myVision: "Visi Saya",
@@ -148,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- Advanced Weather Engine ---
+    // --- Advanced Weather & Solat Engine ---
     const initRain = () => {
         const rainCont = document.getElementById('rain-container');
         if (!rainCont) return;
@@ -186,22 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let statusText = "Clear Sky";
         if (code === 0) document.body.classList.add('weather-clear');
-        else if (code >= 1 && code <= 3) {
-            document.body.classList.add('weather-cloudy');
-            statusText = "Partly Cloudy";
-        }
-        else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
-            document.body.classList.add('weather-rain');
-            statusText = "Rainy";
-        }
-        else if (code >= 95) {
-            document.body.classList.add('weather-storm');
-            statusText = "Thunderstorm";
-        }
-        else {
-            document.body.classList.add('weather-cloudy');
-            statusText = "Overcast";
-        }
+        else if (code >= 1 && code <= 3) { document.body.classList.add('weather-cloudy'); statusText = "Partly Cloudy"; }
+        else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { document.body.classList.add('weather-rain'); statusText = "Rainy"; }
+        else if (code >= 95) { document.body.classList.add('weather-storm'); statusText = "Thunderstorm"; }
+        else { document.body.classList.add('weather-cloudy'); statusText = "Overcast"; }
 
         let icon = '☀️';
         if (document.body.classList.contains('weather-cloudy')) icon = '☁️';
@@ -229,52 +234,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dayItem = document.createElement('div');
                 dayItem.className = 'forecast-item';
                 const dayTemp = Math.round(data.hourly.temperature_2m[i * 24]);
-                dayItem.innerHTML = `
-                    <span class="forecast-day">Day ${i}</span>
-                    <span class="forecast-temp">${dayTemp}°C</span>
-                `;
+                dayItem.innerHTML = `<span class="forecast-day">Day ${i}</span><span class="forecast-temp">${dayTemp}°C</span>`;
                 forecastStrip.appendChild(dayItem);
             }
         }
     };
 
-    const fetchWeather = async (lat, lon) => {
+    const fetchSolatTimes = async (lat, lon) => {
         try {
-            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m`);
+            const response = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=11`); // JAKIM
             const data = await response.json();
-            updateWeatherUI(data);
-        } catch (error) { console.error("Weather fetch failed", error); }
+            const timings = data.data.timings;
+            
+            const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            const now = new Date();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            
+            let nextP = prayers[0];
+            let nextT = timings[nextP];
+
+            for (let p of prayers) {
+                const [h, m] = timings[p].split(':').map(Number);
+                if (h * 60 + m > currentTime) {
+                    nextP = p;
+                    nextT = timings[p];
+                    break;
+                }
+            }
+            
+            const nextPrayerEl = document.getElementById('next-prayer');
+            if (nextPrayerEl) {
+                nextPrayerEl.textContent = `${nextP} ${nextT}`;
+            }
+        } catch (e) { console.error("Solat fetch failed", e); }
+    };
+
+    const fetchData = async (lat, lon) => {
+        try {
+            const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m`);
+            const weatherData = await weatherRes.json();
+            updateWeatherUI(weatherData);
+            fetchSolatTimes(lat, lon);
+        } catch (e) { console.error("Data fetch failed", e); }
     };
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-            (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
-            () => fetchWeather(3.139, 101.686)
+            (pos) => fetchData(pos.coords.latitude, pos.coords.longitude),
+            () => fetchData(3.139, 101.686)
         );
-    } else { fetchWeather(3.139, 101.686); }
+    } else { fetchData(3.139, 101.686); }
 
     initRain();
 
+    const weatherDetails = document.getElementById('weather-details');
     if (weatherWidget && weatherDetails) {
         weatherWidget.addEventListener('mouseenter', () => weatherDetails.classList.add('visible'));
         weatherWidget.addEventListener('mouseleave', () => {
             setTimeout(() => { if (!weatherDetails.matches(':hover')) weatherDetails.classList.remove('visible'); }, 300);
         });
         weatherDetails.addEventListener('mouseleave', () => weatherDetails.classList.remove('visible'));
-        
-        // Add click for mobile
         weatherWidget.addEventListener('click', () => weatherDetails.classList.toggle('visible'));
     }
 
-    // --- Persistence & Other Init ---
+    // --- Final Init ---
     if (storedName) {
         updateGreeting(storedName);
         if (welcomeOverlay) welcomeOverlay.classList.add('hidden');
-    } else {
-        if (welcomeOverlay) welcomeOverlay.classList.remove('hidden');
     }
-
-    if (localStorage.getItem('musHub_view') === 'desktop') document.body.classList.add('desktop-mode');
     
     if (hubNotes) {
         hubNotes.value = localStorage.getItem('musHub_generalNotes') || "";
@@ -326,8 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.card').forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
+        card.style.opacity = '0'; card.style.transform = 'translateY(20px)';
         card.style.transition = `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s`;
         observer.observe(card);
     });
