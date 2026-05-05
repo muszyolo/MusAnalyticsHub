@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
             trackHealth: "Track Health",
             quickNotes: "Quick Notes",
             notesPlaceholder: "Write any general thoughts or reminders here...",
+            aboutContent: "I am an academic researcher focused on bridging the gap between data science and social impact. This Hub serves as my personal ecosystem for tracking thesis progress, mastering new languages, and maintaining physical well-being through structured analytics.",
             modalTitle: "Welcome to the Hub",
             modalDesc: "Please enter your name to personalize your experience.",
             startBtn: "Get Started",
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             trackHealth: "Jejak Kesihatan",
             quickNotes: "Nota Pantas",
             notesPlaceholder: "Tulis sebarang fikiran atau peringatan am di sini...",
+            aboutContent: "Saya adalah seorang penyelidik akademik yang fokus pada merapatkan jurang antara sains data dan impak sosial. Hub ini berfungsi sebagai ekosistem peribadi saya untuk menjejak kemajuan tesis, menguasai bahasa baru, dan mengekalkan kesejahteraan fizikal melalui analitik berstruktur.",
             modalTitle: "Selamat Datang ke Hab",
             modalDesc: "Sila masukkan nama anda untuk memperibadikan pengalaman anda.",
             startBtn: "Mula Sekarang",
@@ -191,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (code > 50) icon = '🌧️';
             if (weatherWidget) weatherWidget.innerHTML = `<span>${icon}</span> ${temp}°C`;
         } catch (error) {
-            console.error("Weather fetch failed:", error);
             if (weatherWidget) weatherWidget.innerHTML = `<span>☁️</span> 28°C`;
             updateWeatherBackground(0);
         }
@@ -223,12 +224,43 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(card);
     });
 
-    // Smooth Scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    // Smooth Scroll & Active State Toggle
+    document.querySelectorAll('nav a').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) target.scrollIntoView({ behavior: 'smooth' });
+            const href = this.getAttribute('href');
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(href === '#' ? '.hero' : href);
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            this.classList.add('active');
         });
     });
+
+    // Scroll Spy for Nav
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                document.querySelectorAll('nav a').forEach(a => {
+                    const href = a.getAttribute('href');
+                    a.classList.remove('active');
+                    if (href === `#${id}`) {
+                        a.classList.add('active');
+                    } else if (id === 'hero' && (href === '#' || href === '#hero')) {
+                        a.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('section[id]').forEach(section => scrollObserver.observe(section));
+    const heroSection = document.querySelector('.hero');
+    if (heroSection) {
+        heroSection.id = 'hero';
+        scrollObserver.observe(heroSection);
+    }
 });
