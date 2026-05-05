@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Shared Component Injection (Weather & Solat) ---
+    // --- Shared Component Injection (Weather, Solat, & Controls) ---
     const injectSharedComponents = () => {
-        // Weather Overlay
+        // 1. Weather Overlay
         if (!document.querySelector('.weather-overlay')) {
             const overlay = document.createElement('div');
             overlay.className = 'weather-overlay';
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.prepend(overlay);
         }
 
-        // Weather Details Card
+        // 2. Weather Details Card
         if (!document.getElementById('weather-details')) {
             const card = document.createElement('div');
             card.id = 'weather-details';
@@ -35,16 +35,27 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.appendChild(card);
         }
 
-        // Solat Widget Injection (Now in Header Controls)
+        // 3. Header Controls & Widget Injection
         const headerControls = document.querySelector('.header-controls');
-        if (headerControls && !document.getElementById('solat-widget')) {
-            const solat = document.createElement('div');
-            solat.id = 'solat-widget';
-            solat.className = 'solat-widget';
-            solat.innerHTML = `<span>🕌</span> <div class="solat-info"><span class="solat-label">Solat</span><span id="next-prayer">--:--</span></div>`;
-            
-            // Insert at the beginning of header controls
-            headerControls.prepend(solat);
+        if (headerControls) {
+            // Weather Widget Button
+            if (!document.getElementById('weather-widget')) {
+                const weatherBtn = document.createElement('button');
+                weatherBtn.id = 'weather-widget';
+                weatherBtn.className = 'control-btn';
+                weatherBtn.style.minWidth = '80px';
+                weatherBtn.innerHTML = '<span>☀️</span> --°C';
+                headerControls.appendChild(weatherBtn);
+            }
+
+            // Solat Widget
+            if (!document.getElementById('solat-widget')) {
+                const solat = document.createElement('div');
+                solat.id = 'solat-widget';
+                solat.className = 'solat-widget';
+                solat.innerHTML = `<span>🕌</span> <div class="solat-info"><span class="solat-label">Solat</span><span id="next-prayer">--:--</span></div>`;
+                headerControls.prepend(solat);
+            }
         }
     };
     injectSharedComponents();
@@ -82,14 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
             trackHealth: "Track Health",
             quickNotes: "Quick Notes",
             notesPlaceholder: "Write any general thoughts or reminders here...",
-            aboutHeroDesc: "Researcher, Data Scientist, and Lifelong Learner.",
-            myVision: "My Vision",
-            visionContent: "To bridge the gap between complex data analysis and human-centric social impact, specifically in the fields of caregiver support and neurodiversity.",
-            researchFocus: "Research Focus",
-            researchContent: "Currently pursuing a Master by Research focusing on Autism Caregiver Support through cluster analysis and statistical modeling.",
-            languagesTitle: "Languages",
-            languagesContent: "Actively mastering multiple languages including Korean, Mandarin, and Japanese to expand academic and cultural horizons.",
-            connectTitle: "Connect With Me",
             modalTitle: "Welcome to the Hub",
             modalDesc: "Please enter your name to personalize your experience.",
             startBtn: "Get Started",
@@ -112,14 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
             trackHealth: "Jejak Kesihatan",
             quickNotes: "Nota Paling Penting",
             notesPlaceholder: "Tulis sebarang fikiran atau peringatan am di sini...",
-            aboutHeroDesc: "Penyelidik, Saintis Data, dan Pelajar Sepanjang Hayat.",
-            myVision: "Visi Saya",
-            visionContent: "Untuk merapatkan jurang antara analisis data yang kompleks dan impak sosial yang berpusatkan manusia, khususnya dalam bidang sokongan penjaga dan neurodiverisiti.",
-            researchFocus: "Fokus Penyelidikan",
-            researchContent: "Kini sedang mengikuti Master secara Penyelidikan dengan fokus pada Sokongan Penjaga Autism melalui analisis kelompok dan pemodelan statistik.",
-            languagesTitle: "Bahasa",
-            languagesContent: "Aktif menguasai pelbagai bahasa termasuk Korea, Mandarin, dan Jepun untuk meluaskan ufuk akademik dan budaya.",
-            connectTitle: "Hubungi Saya",
             modalTitle: "Selamat Datang ke Hab",
             modalDesc: "Sila masukkan nama anda untuk memperibadikan pengalaman anda.",
             startBtn: "Mula Sekarang",
@@ -149,15 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (heroTitle) {
             const isAboutPage = window.location.pathname.includes('about.html');
-            if (isAboutPage) {
-                heroTitle.textContent = t.about;
-            } else {
-                heroTitle.textContent = `${greetingBase}, ${name || 'Mus'}`;
-            }
+            heroTitle.textContent = isAboutPage ? t.about : `${greetingBase}, ${name || 'Mus'}`;
         }
     };
 
-    // --- Advanced Weather & Solat Engine ---
+    // --- Weather & Solat Engine ---
     const initRain = () => {
         const rainCont = document.getElementById('rain-container');
         if (!rainCont) return;
@@ -174,12 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const triggerLightning = () => {
         const flash = document.getElementById('lightning-flash');
-        if (!flash) return;
-        if (document.body.classList.contains('weather-storm')) {
-            if (Math.random() > 0.95) {
-                flash.classList.add('lightning-flash');
-                setTimeout(() => flash.classList.remove('lightning-flash'), 200);
-            }
+        if (flash && document.body.classList.contains('weather-storm') && Math.random() > 0.95) {
+            flash.classList.add('lightning-flash');
+            setTimeout(() => flash.classList.remove('lightning-flash'), 200);
         }
     };
     setInterval(triggerLightning, 3000);
@@ -190,8 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const temp = Math.round(current.temperature);
         
         document.body.classList.remove('weather-clear', 'weather-cloudy', 'weather-rain', 'weather-storm', 'is-night');
-        const hours = new Date().getHours();
-        if (hours >= 19 || hours < 6) document.body.classList.add('is-night');
+        if (new Date().getHours() >= 19 || new Date().getHours() < 6) document.body.classList.add('is-night');
 
         let statusText = "Clear Sky";
         if (code === 0) document.body.classList.add('weather-clear');
@@ -200,32 +187,29 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (code >= 95) { document.body.classList.add('weather-storm'); statusText = "Thunderstorm"; }
         else { document.body.classList.add('weather-cloudy'); statusText = "Overcast"; }
 
-        let icon = '☀️';
-        if (document.body.classList.contains('weather-cloudy')) icon = '☁️';
-        if (document.body.classList.contains('weather-rain')) icon = '🌧️';
-        if (document.body.classList.contains('weather-storm')) icon = '⚡';
-        
-        if (weatherWidget) weatherWidget.innerHTML = `<span>${icon}</span> ${temp}°C`;
+        const weatherWidgetBtn = document.getElementById('weather-widget');
+        if (weatherWidgetBtn) {
+            let icon = '☀️';
+            if (document.body.classList.contains('weather-cloudy')) icon = '☁️';
+            if (document.body.classList.contains('weather-rain')) icon = '🌧️';
+            if (document.body.classList.contains('weather-storm')) icon = '⚡';
+            weatherWidgetBtn.innerHTML = `<span>${icon}</span> ${temp}°C`;
+        }
         
         const tempLargeEl = document.getElementById('temp-large');
-        const conditionEl = document.getElementById('weather-condition');
-        const humidityEl = document.getElementById('val-humidity');
-        const windEl = document.getElementById('val-wind');
-        const feelsEl = document.getElementById('val-feels');
-
         if (tempLargeEl) tempLargeEl.textContent = `${temp}°C`;
-        if (conditionEl) conditionEl.textContent = statusText;
-        if (humidityEl) humidityEl.textContent = `${data.hourly.relativehumidity_2m[0]}%`;
-        if (windEl) windEl.textContent = `${current.windspeed} km/h`;
-        if (feelsEl) feelsEl.textContent = `${Math.round(current.temperature + 2)}°C`;
+        if (document.getElementById('weather-condition')) document.getElementById('weather-condition').textContent = statusText;
+        if (document.getElementById('val-humidity')) document.getElementById('val-humidity').textContent = `${data.hourly.relativehumidity_2m[0]}%`;
+        if (document.getElementById('val-wind')) document.getElementById('val-wind').textContent = `${current.windspeed} km/h`;
+        if (document.getElementById('val-feels')) document.getElementById('val-feels').textContent = `${Math.round(current.temperature + 2)}°C`;
 
         const forecastStrip = document.getElementById('forecast-strip');
         if (forecastStrip) {
             forecastStrip.innerHTML = '';
             for (let i = 1; i < 6; i++) {
+                const dayTemp = Math.round(data.hourly.temperature_2m[i * 24]);
                 const dayItem = document.createElement('div');
                 dayItem.className = 'forecast-item';
-                const dayTemp = Math.round(data.hourly.temperature_2m[i * 24]);
                 dayItem.innerHTML = `<span class="forecast-day">Day ${i}</span><span class="forecast-temp">${dayTemp}°C</span>`;
                 forecastStrip.appendChild(dayItem);
             }
@@ -234,30 +218,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fetchSolatTimes = async (lat, lon) => {
         try {
-            const response = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=11`); // JAKIM
+            const response = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=11`);
             const data = await response.json();
             const timings = data.data.timings;
-            
             const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-            const now = new Date();
-            const currentTime = now.getHours() * 60 + now.getMinutes();
-            
-            let nextP = prayers[0];
-            let nextT = timings[nextP];
-
+            const currentTime = new Date().getHours() * 60 + new Date().getMinutes();
+            let nextP = prayers[0], nextT = timings[nextP];
             for (let p of prayers) {
                 const [h, m] = timings[p].split(':').map(Number);
-                if (h * 60 + m > currentTime) {
-                    nextP = p;
-                    nextT = timings[p];
-                    break;
-                }
+                if (h * 60 + m > currentTime) { nextP = p; nextT = timings[p]; break; }
             }
-            
             const nextPrayerEl = document.getElementById('next-prayer');
-            if (nextPrayerEl) {
-                nextPrayerEl.textContent = `${nextP} ${nextT}`;
-            }
+            if (nextPrayerEl) nextPrayerEl.textContent = `${nextP} ${nextT}`;
         } catch (e) { console.error("Solat fetch failed", e); }
     };
 
@@ -275,31 +247,32 @@ document.addEventListener('DOMContentLoaded', () => {
             (pos) => fetchData(pos.coords.latitude, pos.coords.longitude),
             () => fetchData(3.139, 101.686)
         );
-    } else { fetchData(3.139, 101.686); }
+    } else fetchData(3.139, 101.686);
 
     initRain();
 
-    const weatherDetails = document.getElementById('weather-details');
-    if (weatherWidget && weatherDetails) {
-        weatherWidget.addEventListener('mouseenter', () => weatherDetails.classList.add('visible'));
-        weatherWidget.addEventListener('mouseleave', () => {
-            setTimeout(() => { if (!weatherDetails.matches(':hover')) weatherDetails.classList.remove('visible'); }, 300);
-        });
-        weatherDetails.addEventListener('mouseleave', () => weatherDetails.classList.remove('visible'));
-        weatherWidget.addEventListener('click', () => weatherDetails.classList.toggle('visible'));
-    }
+    // Hover logic for dynamic widget
+    document.addEventListener('mouseover', (e) => {
+        const weatherDetails = document.getElementById('weather-details');
+        const weatherBtn = document.getElementById('weather-widget');
+        if (weatherDetails && weatherBtn) {
+            if (weatherBtn.contains(e.target) || weatherDetails.contains(e.target)) {
+                weatherDetails.classList.add('visible');
+            } else {
+                weatherDetails.classList.remove('visible');
+            }
+        }
+    });
 
     // --- Final Init ---
     if (storedName) {
         updateGreeting(storedName);
         if (welcomeOverlay) welcomeOverlay.classList.add('hidden');
     }
-    
     if (hubNotes) {
         hubNotes.value = localStorage.getItem('musHub_generalNotes') || "";
         hubNotes.addEventListener('input', (e) => localStorage.setItem('musHub_generalNotes', e.target.value));
     }
-
     applyTranslations();
 
     if (langToggleBtn) langToggleBtn.addEventListener('click', () => {
@@ -338,8 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)';
             }
         });
     }, { threshold: 0.1 });
