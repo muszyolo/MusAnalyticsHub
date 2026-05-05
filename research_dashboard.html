@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master by Research Tracker | 2026-2027</title>
+    <link rel="stylesheet" href="research_dashboard_style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Main Content -->
+        <main>
+            <header>
+                <h1 class="gradient-text" style="font-size: 3.5rem;">Research Journey</h1>
+                <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 1.1rem;">Master by Research: Autism Caregiver Support & Cluster Analysis</p>
+            </header>
+
+            <!-- Progress Chart Card -->
+            <section class="card" style="margin-top: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>Thesis Completion Roadmap</h2>
+                    <span id="current-phase" style="font-size: 1.2rem; font-weight: 600; color: var(--primary);">Phase 1: Foundation</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="researchChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Literature Quality Heatmap -->
+            <section class="card" style="margin-top: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2>Literature Quality Heatmap</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">Darker = Higher Quality/Fit</span>
+                </div>
+                <div class="heatmap-container">
+                    <div class="heatmap-header"></div>
+                    <div class="heatmap-header">Methodology</div>
+                    <div class="heatmap-header">Relevance</div>
+                    <div class="heatmap-header">Data Quality</div>
+                    <div class="heatmap-header">SJR Rank</div>
+
+                    <div class="heatmap-label">J. of Autism</div>
+                    <div class="heatmap-cell level-4" title="95%"></div>
+                    <div class="heatmap-cell level-4" title="90%"></div>
+                    <div class="heatmap-cell level-3" title="75%"></div>
+                    <div class="heatmap-cell level-4" title="92%"></div>
+
+                    <div class="heatmap-label">AI & Stats</div>
+                    <div class="heatmap-cell level-4" title="98%"></div>
+                    <div class="heatmap-cell level-2" title="50%"></div>
+                    <div class="heatmap-cell level-4" title="95%"></div>
+                    <div class="heatmap-cell level-3" title="80%"></div>
+
+                    <div class="heatmap-label">Social Care</div>
+                    <div class="heatmap-cell level-2" title="45%"></div>
+                    <div class="heatmap-cell level-4" title="100%"></div>
+                    <div class="heatmap-cell level-2" title="55%"></div>
+                    <div class="heatmap-cell level-2" title="60%"></div>
+
+                    <div class="heatmap-label">NLP Review</div>
+                    <div class="heatmap-cell level-3" title="80%"></div>
+                    <div class="heatmap-cell level-3" title="85%"></div>
+                    <div class="heatmap-cell level-3" title="78%"></div>
+                    <div class="heatmap-cell level-4" title="90%"></div>
+                </div>
+            </section>
+
+            <!-- Resource Highlights Section -->
+            <section style="margin-top: 3rem;">
+                <h2>Core Research Modules</h2>
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <img src="cluster_analysis.png" alt="Cluster Analysis" class="resource-img">
+                        <div class="resource-card-content">
+                            <h3>Cluster Analysis</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Segmenting caregiver needs through statistical modeling.</p>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <img src="nlp_integration.png" alt="NLP Integration" class="resource-img">
+                        <div class="resource-card-content">
+                            <h3>NLP Integration</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Processing qualitative feedback using advanced NLP.</p>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <img src="ethics_compliance.png" alt="Ethics & Compliance" class="resource-img">
+                        <div class="resource-card-content">
+                            <h3>Ethics & Compliance</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Maintaining high academic and ethical standards.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Sidebar -->
+        <aside>
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <h3 id="habit-date">May 4, 2026</h3>
+                    <div class="date-nav">
+                        <button onclick="changeDate(-1)" class="nav-btn">←</button>
+                        <button onclick="changeDate(1)" class="nav-btn">→</button>
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">Daily Research Habits</p>
+                
+                <div class="streak-badge">
+                    <span id="streak-count">0</span> Day Streak 🔥
+                </div>
+                
+                <ul class="checklist" id="habit-list">
+                    <li class="checklist-item" onclick="toggleCheck(this, 0)">
+                        <div class="checkbox"></div>
+                        <span>Write 500 Words (Draft/Notes)</span>
+                    </li>
+                    <li class="checklist-item" onclick="toggleCheck(this, 1)">
+                        <div class="checkbox"></div>
+                        <span>Review 1 Academic Paper</span>
+                    </li>
+                    <li class="checklist-item" onclick="toggleCheck(this, 2)">
+                        <div class="checkbox"></div>
+                        <span>Update Literature Matrix</span>
+                    </li>
+                    <li class="checklist-item" onclick="toggleCheck(this, 3)">
+                        <div class="checkbox"></div>
+                        <span>Clean/Organize Data (30m)</span>
+                    </li>
+                    <li class="checklist-item" onclick="toggleCheck(this, 4)">
+                        <div class="checkbox"></div>
+                        <span>Audit Citations & Refs</span>
+                    </li>
+                </ul>
+
+                <div style="margin-top: 2rem; padding: 1.25rem; background: rgba(16, 185, 129, 0.1); border-radius: 16px; border-left: 4px solid var(--primary);">
+                    <h4 style="color: var(--primary);">Supervisor Note</h4>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Focus on identifying specific gaps in the Malaysia caregiver data before the next check-in.</p>
+                </div>
+
+                <!-- Google Calendar Sync Button -->
+                <button onclick="exportToCalendar()" class="sync-btn" style="margin-top: 1.5rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem; background: #4285f4; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
+                    Sync to Google Calendar
+                </button>
+            </div>
+
+            <div class="card" style="margin-top: 2rem; text-align: center;">
+                <p style="color: var(--text-muted);">Project Deadline</p>
+                <h2 style="margin-top: 0.5rem; color: var(--secondary);">April 2027</h2>
+                <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; margin-top: 1.5rem; overflow: hidden; border: 1px solid var(--glass-border);">
+                    <div style="width: 8%; height: 100%; background: var(--accent-gradient); box-shadow: 0 0 10px var(--primary);"></div>
+                </div>
+                <p style="font-size: 0.9rem; margin-top: 0.75rem; color: var(--primary); font-weight: 600;">8% Journey Complete</p>
+            </div>
+        </aside>
+    </div>
+
+    <script src="research_dashboard.js"></script>
+</body>
+</html>

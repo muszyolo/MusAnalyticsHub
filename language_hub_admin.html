@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Mastery Hub</title>
+    <link rel="stylesheet" href="language_hub_admin.css?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <main class="main-content">
+        <header class="header">
+            <div class="header-top">
+                <div class="course-selector" id="course-selector">
+                    <button class="course-btn" id="current-course-btn">
+                        <img id="current-lang-flag" src="https://flagcdn.com/w40/gb.png" width="24" alt="flag">
+                        <span id="current-lang-name">English</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M7 10l5 5 5-5z"/></svg>
+                    </button>
+                    <div class="course-dropdown" id="course-dropdown">
+                        <div class="course-dropdown-inner">
+                            <div class="dropdown-header" id="ui-my-courses">MY COURSES</div>
+                            <div class="course-item active" onclick="renderLanguage('english')">
+                                <img src="https://flagcdn.com/w40/gb.png" width="24" alt="English">
+                                <span>English</span>
+                            </div>
+                            <div class="course-item" onclick="renderLanguage('korean')">
+                                <img src="https://flagcdn.com/w40/kr.png" width="24" alt="Hangul">
+                                <span>Hangul</span>
+                            </div>
+                            <div class="course-item" onclick="renderLanguage('chinese')">
+                                <img src="https://flagcdn.com/w40/cn.png" width="24" alt="Mandarin">
+                                <span>Mandarin</span>
+                            </div>
+                            <div class="course-item" onclick="renderLanguage('philippine')">
+                                <img src="https://flagcdn.com/w40/ph.png" width="24" alt="Tagalog">
+                                <span>Tagalog</span>
+                            </div>
+                            <div class="course-item" onclick="renderLanguage('malay')">
+                                <img src="https://flagcdn.com/w40/my.png" width="24" alt="Malay">
+                                <span>Malay</span>
+                            </div>
+                            <div class="course-item" onclick="renderLanguage('indonesian')">
+                                <img src="https://flagcdn.com/w40/id.png" width="24" alt="Indonesian">
+                                <span>Indonesian</span>
+                            </div>
+                            <div class="course-item" onclick="renderLanguage('japanese')">
+                                <img src="https://flagcdn.com/w40/jp.png" width="24" alt="Japanese">
+                                <span>Japanese</span>
+                            </div>
+                            <div class="dropdown-footer">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--text-secondary)"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                <span id="ui-add-course">Add a new course</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="header-controls">
+                    <button id="view-mode-btn" class="course-btn" onclick="toggleViewMode()" title="Toggle Desktop/Mobile View">
+                        <svg id="view-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    </button>
+                    <button id="lang-toggle-btn" class="course-btn" onclick="toggleAppLanguage()" style="font-weight: 800; border-color: var(--accent);">EN | BM</button>
+                </div>
+            </div>
+            <h1 class="lang-title" id="lang-title">🇬🇧 English Mastery Plan for Yourself</h1>
+            <p id="ui-roadmap-desc" style="color: var(--text-secondary); text-align: center;">Your 12-week roadmap to fluency.</p>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="search-container">
+                <form action="https://www.youtube.com/results" method="GET" target="_blank" style="display: contents;">
+                    <input type="text" name="search_query" id="youtube-search" placeholder="Search YouTube for lessons..." class="search-input">
+                    <button type="submit" class="search-btn" title="Search YouTube">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </form>
+                <a href="https://chat.deepseek.com" target="_blank" class="ai-btn deepseek" title="Open DeepSeek AI">
+                    <!-- DeepSeek Logo -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z"/></svg>
+                    <span>DeepSeek</span>
+                </a>
+                <a href="https://chat.openai.com" target="_blank" class="ai-btn chatgpt" title="Open ChatGPT AI">
+                    <!-- ChatGPT Logo -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M22.28 9.82a5.98 5.98 0 0 0-.52-4.91 6.05 6.05 0 0 0-4-2.83 6.03 6.03 0 0 0-5.06.98 6.04 6.04 0 0 0-4.56-2.11 6.06 6.06 0 0 0-5.18 3.05 6.03 6.03 0 0 0-1.14 4.88 6.04 6.04 0 0 0 .51 4.91 6.02 6.02 0 0 0 4.01 2.82 6.01 6.01 0 0 0 5.06-.99 6.06 6.06 0 0 0 4.56 2.11 6.06 6.06 0 0 0 5.18-3.05 6.03 6.03 0 0 0 1.13-4.88zM12 13.11l-3.37 1.91a.89.89 0 0 0-.44.77v3.95l-.11-.06a4.41 4.41 0 0 1-1.5-2.63 4.36 4.36 0 0 1 1.21-2.87l.11-.06 3.37-1.91a.88.88 0 0 0 .44-.77v-4.76l1.69.98a.07.07 0 0 1 .03.05v3.95a4.45 4.45 0 0 1-1.49 2.63z"/></svg>
+                    <span>ChatGPT</span>
+                </a>
+                <a href="https://gemini.google.com" target="_blank" class="ai-btn gemini" title="Open Gemini AI">
+                    <!-- Gemini Logo -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2z"/></svg>
+                    <span>Gemini</span>
+                </a>
+                <a href="https://notebooklm.google.com" target="_blank" class="ai-btn notebook" title="Open NotebookLM Research">
+                    <!-- NotebookLM Logo -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M4 4v16h16V4H4zm14 14H6V6h12v12zM8 8h8v2H8V8zm0 4h8v2H8v-2zm0 4h5v2H8v-2z"/></svg>
+                    <span>NotebookLM</span>
+                </a>
+            </div>
+        </header>
+
+        <section id="roadmap-grid" class="roadmap-grid">
+            <!-- Roadmap cards will be injected here by JS -->
+        </section>
+
+        <section class="resources-section">
+            <h2 id="ui-resources-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Free Online Resources</h2>
+            <div id="resource-list" class="resource-list">
+                <!-- Resources will be injected here by JS -->
+            </div>
+        </section>
+
+        <section class="notes-section">
+            <h2 id="ui-notes-title" style="font-size: 1.5rem;">Daily Study Notes</h2>
+            <textarea id="daily-notes" class="notes-area" placeholder="Write your thoughts, vocabulary, or research ideas here..."></textarea>
+        </section>
+    </main>
+
+    <!-- Welcome Modal -->
+    <div id="welcome-overlay" class="welcome-overlay hidden">
+        <div class="welcome-card">
+            <h2 id="modal-title">Admin Hub</h2>
+            <p id="modal-desc">Please enter your name to access the admin controls.</p>
+            <div class="name-input-group">
+                <input type="text" id="user-name-input" class="name-input" placeholder="Your name..." autocomplete="off">
+            </div>
+            <button id="start-btn" class="start-btn">Enter Hub</button>
+        </div>
+    </div>
+
+    <script src="language_hub_data.js?v=20"></script>
+    <script src="language_hub_admin.js?v=20"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Mastery Hub</title>
+    <link rel="stylesheet" href="language_hub_initial.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <button class="flag-btn active" data-lang="english" title="English (UK)">
+            <img src="https://flagcdn.com/w80/gb.png" width="30" style="border-radius: 2px;">
+        </button>
+        <button class="flag-btn" data-lang="chinese" title="Chinese (China)">
+            <img src="https://flagcdn.com/w80/cn.png" width="30" style="border-radius: 2px;">
+        </button>
+        <button class="flag-btn" data-lang="philippine" title="Philippine">
+            <img src="https://flagcdn.com/w80/ph.png" width="30" style="border-radius: 2px;">
+        </button>
+        <button class="flag-btn" data-lang="korean" title="Korean">
+            <img src="https://flagcdn.com/w80/kr.png" width="30" style="border-radius: 2px;">
+        </button>
+
+        <div class="thesis-timer" title="Days until Thesis Submission">
+            <span class="days-count" id="days-count">0</span>
+            DAYS
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1 class="lang-title" id="lang-title">≡ƒç¼≡ƒçº English Mastery</h1>
+            <p style="color: var(--text-secondary);">Your 12-week roadmap to fluency.</p>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="youtube-search" placeholder="Search YouTube for lessons..." class="search-input">
+                <button id="search-btn" class="search-btn" title="Search YouTube">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"/></svg>
+                </button>
+                <a href="https://chat.deepseek.com" target="_blank" class="ai-btn deepseek" title="Open DeepSeek">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4ZM12 6L14 10H10L12 6ZM12 18L10 14H14L12 18ZM7 12L11 11V13L7 12ZM17 12L13 13V11L17 12Z"/></svg>
+                    <span>DeepSeek</span>
+                </a>
+                <a href="https://chat.openai.com" target="_blank" class="ai-btn chatgpt" title="Open ChatGPT">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5153-4.9066 6.0462 6.0462 0 0 0-3.9998-2.8271 6.0274 6.0274 0 0 0-5.0624.9807 6.0394 6.0394 0 0 0-4.5644-2.1073 6.0592 6.0592 0 0 0-5.1813 3.0477 6.0295 6.0295 0 0 0-1.1376 4.8821 6.0351 6.0351 0 0 0 .5101 4.9102 6.019 6.019 0 0 0 4.0131 2.8177 6.01 6.01 0 0 0 5.0613-.9862 6.0566 6.0566 0 0 0 4.5601 2.1146 6.0595 6.0595 0 0 0 5.1813-3.0502 6.0332 6.0332 0 0 0 1.1349-4.8839zm-5.0353 8.0818a4.4046 4.4046 0 0 1-2.8764 1.2074 4.356 4.356 0 0 1-3.2856-1.3185l.111-.0629 3.3703-1.9082a.8861.8861 0 0 0 .4442-.77l.0011-4.7569 1.6919.9752a.0674.0674 0 0 1 .0338.0518v3.9516a4.4465 4.4465 0 0 1-1.4903 2.6305zm-4.7082-14.5332c.1052-.0324.2155-.0503.3256-.0533a4.352 4.352 0 0 1 2.8659 1.2048 4.4054 4.4054 0 0 1 1.4971 2.6336 4.3903 4.3903 0 0 1-1.2109 2.8756l-.1102.0624-3.3703 1.9082a.8851.8851 0 0 0-.4441.7701v4.7551l-1.6923-.9773a.0671.0671 0 0 1-.0337-.0521V10.963a4.4302 4.4302 0 0 1 1.4889-2.6315l3.2084-1.8153-.0244-.0141zm-6.1647 1.7304a4.4103 4.4103 0 0 1 2.8782-1.2096 4.356 4.356 0 0 1 3.2846 1.3173l-.1107.0627-3.3703 1.9082a.8851.8851 0 0 0-.4441.7701v2.3621L4.2042 10.264a.066.066 0 0 1-.0337-.0521V6.2599a4.4414 4.4414 0 0 1 1.487-2.6289l1.4153-.8006zm-.9792 11.1381a4.4103 4.4103 0 0 1-1.4973-2.6354 4.3514 4.3514 0 0 1 1.2108-2.8719l.1117-.0631 3.3703-1.9082a.8846.8846 0 0 0 .4441-.7701v-2.3621l4.0366 2.3299a.0672.0672 0 0 1 .0337.0521v3.9523a4.4394 4.4394 0 0 1-1.4859 2.6273l-6.224 3.5815zm10.274 1.7746a4.4103 4.4103 0 0 1-2.8783 1.2096 4.3512 4.3512 0 0 1-3.2847-1.3173l.1107-.0627 3.3703-1.9082a.8851.8851 0 0 0 .4441-.7701v-2.3621l4.0366 2.3299a.0674.0674 0 0 1 .0337.0521v3.9526a4.4365 4.4365 0 0 1-1.4854 2.6277l-1.4153.801zm1.212-4.7112l-1.6923-.9773a.0671.0671 0 0 1-.0337-.0521V9.7566a4.4266 4.4266 0 0 1 1.4874-2.6289l6.2233-3.5825a4.4154 4.4154 0 0 1 1.4973 2.6354 4.3462 4.3462 0 0 1-1.2112 2.8719l-.1117.0631-3.3703 1.9082a.8846.8846 0 0 0-.4441.7701v2.3621zm-5.2205-2.2208L12 11.212l-1.6344.9247V10.288L12 9.3633l1.6344.9247v1.8494z"/></svg>
+                    <span>ChatGPT</span>
+                </a>
+                <a href="https://gemini.google.com" target="_blank" class="ai-btn gemini" title="Open Gemini">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/></svg>
+                    <span>Gemini</span>
+                </a>
+                <a href="https://notebooklm.google.com" target="_blank" class="ai-btn notebook" title="Open NotebookLM">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M4 4V20H20V4H4ZM18 18H6V6H18V18ZM8 8H16V10H8V8ZM8 12H16V14H8V12ZM8 16H12V18H8V16Z"/></svg>
+                    <span>NotebookLM</span>
+                </a>
+            </div>
+        </header>
+
+        <section id="roadmap-grid" class="roadmap-grid">
+            <!-- Roadmap cards will be injected here by JS -->
+        </section>
+
+        <section class="resources-section">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Free Online Resources</h2>
+            <div id="resource-list" class="resource-list">
+                <!-- Resources will be injected here by JS -->
+            </div>
+        </section>
+
+        <section class="notes-section">
+            <h2 style="font-size: 1.5rem;">Daily Study Notes</h2>
+            <textarea id="daily-notes" class="notes-area" placeholder="Write your thoughts, vocabulary, or research ideas here..."></textarea>
+        </section>
+    </main>
+
+    <script src="language_hub_initial_data.js"></script>
+    <script src="language_hub_initial.js"></script>
+</body>
+</html>

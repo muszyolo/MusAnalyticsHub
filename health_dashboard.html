@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Recovery Dashboard | 118kg to 90kg</title>
+    <link rel="stylesheet" href="dashboard_style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Main Content -->
+        <main>
+            <header>
+                <h1 class="gradient-text" style="font-size: 3rem;">Your Health Journey</h1>
+                <p style="color: var(--text-muted); margin-top: 0.5rem;">Tracking progress from 118kg to 90kg</p>
+            </header>
+
+            <!-- Chart Card -->
+            <section class="card" style="margin-top: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>Weight Projection</h2>
+                    <span id="current-weight" style="font-size: 1.5rem; font-weight: 600; color: var(--primary);">118.0 kg</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="weightChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Recipes Section -->
+            <section style="margin-top: 3rem;">
+                <h2>Recommended Recipes</h2>
+                <div class="recipe-grid">
+                    <div class="recipe-card">
+                        <img src="salmon.png" alt="Baked Salmon">
+                        <div class="recipe-info">
+                            <h3>Baked Salmon</h3>
+                            <p>High Vitamin D & Omega-3</p>
+                        </div>
+                    </div>
+                    <div class="recipe-card">
+                        <img src="smoothie.png" alt="Green Smoothie">
+                        <div class="recipe-info">
+                            <h3>Liver-Detox Smoothie</h3>
+                            <p>Fiber & Antioxidants</p>
+                        </div>
+                    </div>
+                    <div class="recipe-card">
+                        <img src="salad.png" alt="Chicken Salad">
+                        <div class="recipe-info">
+                            <h3>Mediterranean Salad</h3>
+                            <p>Low Sodium & Heart Healthy</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Sidebar -->
+        <aside>
+            <div class="card">
+                <h3>Daily Check-ins</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">Keep consistent to see results</p>
+                
+                <ul class="checklist">
+                    <li class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <span>Vitamin D Supplement</span>
+                    </li>
+                    <li class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <span>Sodium < 2,000mg</span>
+                    </li>
+                    <li class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <span>15 Min Walking</span>
+                    </li>
+                    <li class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <span>Zero Sugary Drinks</span>
+                    </li>
+                    <li class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <span>8 Glasses of Water</span>
+                    </li>
+                </ul>
+
+                <div style="margin-top: 2rem; padding: 1rem; background: rgba(59, 130, 246, 0.1); border-radius: 12px; border-left: 4px solid var(--secondary);">
+                    <h4 style="color: var(--secondary);">Heart Note</h4>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Monitor for any sudden ankle swelling or breathlessness.</p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 2rem; text-align: center;">
+                <p style="color: var(--text-muted);">Estimated Completion</p>
+                <h2 style="margin-top: 0.5rem;">December 2026</h2>
+                <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-top: 1rem; overflow: hidden;">
+                    <div style="width: 5%; height: 100%; background: var(--accent-gradient);"></div>
+                </div>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--primary);">2% Complete</p>
+            </div>
+        </aside>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
