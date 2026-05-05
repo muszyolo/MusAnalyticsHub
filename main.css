@@ -424,27 +424,66 @@ nav a.active::after {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: center;
+    width: 100%;
+    margin-top: 0.5rem;
 }
 
-.clock-widget {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    padding: 0.4rem 0.6rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-main);
+.solat-widget, .clock-widget, .control-btn {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    justify-content: center;
+    height: 44px; /* Sufficient height for 2-line solat or 1-line others */
+    padding: 0 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+    gap: 0.5rem;
+    white-space: nowrap;
+    transition: all 0.3s ease;
 }
 
-@media (max-width: 1024px) {
+.solat-widget {
+    background: rgba(20, 184, 166, 0.1);
+    border-color: rgba(20, 184, 166, 0.2);
+    color: var(--accent);
+}
+
+.solat-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.1;
+}
+
+.solat-label {
+    font-size: 0.55rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.clock-widget span, .control-btn span {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
     .header-controls {
-        justify-content: center;
-        gap: 0.4rem;
+        gap: 0.35rem;
+    }
+    
+    .solat-widget, .clock-widget, .control-btn {
+        height: 40px;
+        padding: 0 0.5rem;
+        font-size: 0.7rem;
+        gap: 0.3rem;
+    }
+
+    .solat-label {
+        font-size: 0.45rem;
     }
 }
 
