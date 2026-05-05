@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Shared Component Injection (Weather, Solat, & Controls) ---
+    // --- Shared Component Injection (Weather, Solat, Clock & Controls) ---
     const injectSharedComponents = () => {
         // 1. Weather Overlay
         if (!document.querySelector('.weather-overlay')) {
@@ -38,14 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Header Controls & Widget Injection
         const headerControls = document.querySelector('.header-controls');
         if (headerControls) {
-            // Weather Widget Button
-            if (!document.getElementById('weather-widget')) {
-                const weatherBtn = document.createElement('button');
-                weatherBtn.id = 'weather-widget';
-                weatherBtn.className = 'control-btn';
-                weatherBtn.style.minWidth = '80px';
-                weatherBtn.innerHTML = '<span>☀️</span> --°C';
-                headerControls.appendChild(weatherBtn);
+            // Clock Widget
+            if (!document.getElementById('clock-widget')) {
+                const clock = document.createElement('div');
+                clock.id = 'clock-widget';
+                clock.className = 'control-btn clock-widget';
+                clock.innerHTML = '<span>🕒</span> --:--';
+                headerControls.prepend(clock);
             }
 
             // Solat Widget
@@ -55,6 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 solat.className = 'solat-widget';
                 solat.innerHTML = `<span>🕌</span> <div class="solat-info"><span class="solat-label">Solat</span><span id="next-prayer">--:--</span></div>`;
                 headerControls.prepend(solat);
+            }
+
+            // Weather Widget Button
+            if (!document.getElementById('weather-widget')) {
+                const weatherBtn = document.createElement('button');
+                weatherBtn.id = 'weather-widget';
+                weatherBtn.className = 'control-btn';
+                weatherBtn.innerHTML = '<span>☀️</span> --°C';
+                headerControls.appendChild(weatherBtn);
             }
         }
     };
@@ -115,6 +123,14 @@ document.addEventListener('DOMContentLoaded', () => {
             trackHealth: "Jejak Kesihatan",
             quickNotes: "Nota Paling Penting",
             notesPlaceholder: "Tulis sebarang fikiran atau peringatan am di sini...",
+            aboutHeroDesc: "Penyelidik, Saintis Data, dan Pelajar Sepanjang Hayat.",
+            myVision: "Visi Saya",
+            visionContent: "Untuk merapatkan jurang antara analisis data yang kompleks dan impak sosial yang berpusatkan manusia, khususnya dalam bidang sokongan penjaga dan neurodiverisiti.",
+            researchFocus: "Fokus Penyelidikan",
+            researchContent: "Kini sedang mengikuti Master secara Penyelidikan dengan fokus pada Sokongan Penjaga Autism melalui analisis kelompok dan pemodelan statistik.",
+            languagesTitle: "Bahasa",
+            languagesContent: "Aktif menguasai pelbagai bahasa termasuk Korea, Mandarin, dan Jepun untuk meluaskan ufuk akademik dan budaya.",
+            connectTitle: "Hubungi Saya",
             modalTitle: "Selamat Datang ke Hab",
             modalDesc: "Sila masukkan nama anda untuk memperibadikan pengalaman anda.",
             startBtn: "Mula Sekarang",
@@ -251,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initRain();
 
-    // Hover logic for dynamic widget
+    // Hover/Click logic for weather details
     document.addEventListener('mouseover', (e) => {
         const weatherDetails = document.getElementById('weather-details');
         const weatherBtn = document.getElementById('weather-widget');
@@ -261,6 +277,16 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 weatherDetails.classList.remove('visible');
             }
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        const weatherBtn = document.getElementById('weather-widget');
+        const weatherDetails = document.getElementById('weather-details');
+        if (weatherBtn && weatherBtn.contains(e.target)) {
+            weatherDetails.classList.toggle('visible');
+        } else if (weatherDetails && !weatherDetails.contains(e.target)) {
+            weatherDetails.classList.remove('visible');
         }
     });
 
@@ -302,10 +328,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setInterval(() => {
-        if (!clockWidget) return;
+        const clock = document.getElementById('clock-widget');
+        if (!clock) return;
         const now = new Date();
-        const timeStr = now.toLocaleTimeString(appLanguage === 'EN' ? 'en-US' : 'ms-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-        clockWidget.innerHTML = `<span>🕒</span> ${timeStr}`;
+        const timeStr = now.toLocaleTimeString(appLanguage === 'EN' ? 'en-US' : 'ms-MY', { hour: '2-digit', minute: '2-digit', hour12: true });
+        clock.innerHTML = `<span>🕒</span> ${timeStr}`;
     }, 1000);
 
     const observer = new IntersectionObserver((entries) => {
