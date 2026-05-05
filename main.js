@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const langToggleBtn = document.getElementById('lang-toggle-btn');
     const viewModeBtn = document.getElementById('view-mode-btn');
     const viewIcon = document.getElementById('view-icon');
+    const hubNotes = document.getElementById('hub-notes');
 
     // State
     let appLanguage = localStorage.getItem('musHub_lang') || 'EN';
@@ -32,6 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
             healthTitle: "Health & Nutrition",
             healthDesc: "Optimize your physical well-being with nutrition tracking and personalized exercise routines.",
             trackHealth: "Track Health",
+            quickNotes: "Quick Notes",
+            notesPlaceholder: "Write any general thoughts or reminders here...",
             modalTitle: "Welcome to the Hub",
             modalDesc: "Please enter your name to personalize your experience.",
             startBtn: "Get Started",
@@ -54,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
             healthTitle: "Kesihatan & Nutrisi",
             healthDesc: "Optimumkan kesejahteraan fizikal anda dengan penjejakan nutrisi dan rutin senaman peribadi.",
             trackHealth: "Jejak Kesihatan",
+            quickNotes: "Nota Pantas",
+            notesPlaceholder: "Tulis sebarang fikiran atau peringatan am di sini...",
             modalTitle: "Selamat Datang ke Hab",
             modalDesc: "Sila masukkan nama anda untuk memperibadikan pengalaman anda.",
             startBtn: "Mula Sekarang",
@@ -69,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (t[key]) el.textContent = t[key];
         });
         nameInput.placeholder = t.placeholder;
+        hubNotes.placeholder = t.notesPlaceholder;
         langToggleBtn.textContent = appLanguage === 'EN' ? 'EN | BM' : 'BM | EN';
         updateGreeting(localStorage.getItem('musHub_userName'));
     };
@@ -104,6 +110,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const updateWeatherBackground = (code) => {
+        document.body.classList.remove('weather-clear', 'weather-cloudy', 'weather-rain', 'weather-storm');
+        if (code === 0) document.body.classList.add('weather-clear');
+        else if (code >= 1 && code <= 3) document.body.classList.add('weather-cloudy');
+        else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) document.body.classList.add('weather-rain');
+        else if (code >= 95) document.body.classList.add('weather-storm');
+        else document.body.classList.add('weather-cloudy');
+    };
+
     // Initialize
     if (storedName) {
         updateGreeting(storedName);
@@ -116,6 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('desktop-mode');
     }
     
+    // Notes Persistence
+    hubNotes.value = localStorage.getItem('musHub_generalNotes') || "";
+    hubNotes.addEventListener('input', (e) => {
+        localStorage.setItem('musHub_generalNotes', e.target.value);
+    });
+
     updateViewIcon();
     applyTranslations();
 
@@ -127,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = nameInput.value.trim();
         if (name) {
             localStorage.setItem('musHub_userName', name);
+            localStorage.setItem('userName', name); // Sync for sub-modules
             updateGreeting(name);
             welcomeOverlay.classList.add('hidden');
         } else {
@@ -155,12 +177,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             const temp = Math.round(data.current_weather.temperature);
             const code = data.current_weather.weathercode;
+            updateWeatherBackground(code);
             let icon = '☀️';
             if (code > 0) icon = '☁️';
             if (code > 50) icon = '🌧️';
             weatherWidget.innerHTML = `<span>${icon}</span> ${temp}°C`;
         } catch (error) {
             weatherWidget.innerHTML = `<span>☁️</span> 28°C`;
+            document.body.classList.add('weather-clear');
         }
     };
 

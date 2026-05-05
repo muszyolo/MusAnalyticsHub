@@ -35,6 +35,61 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     min-height: 100vh;
+    transition: background 1.5s ease-in-out;
+    background-attachment: fixed;
+}
+
+/* Weather Backgrounds */
+body.weather-clear {
+    background: radial-gradient(circle at top right, #0d9488, #0a0a0a 70%);
+}
+
+body.weather-cloudy {
+    background: radial-gradient(circle at top right, #475569, #0a0a0a 80%);
+}
+
+body.weather-rain {
+    background: radial-gradient(circle at top right, #1e293b, #020617 90%);
+}
+
+body.weather-storm {
+    background: radial-gradient(circle at top right, #312e81, #020617 100%);
+}
+
+/* Animated Weather Effects */
+.weather-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.05);
+    filter: blur(50px);
+    border-radius: 50%;
+    animation: moveClouds 60s linear infinite;
+}
+
+@keyframes moveClouds {
+    from { transform: translateX(-100%) translateY(0); }
+    to { transform: translateX(200%) translateY(20px); }
+}
+
+body:not(.weather-clear) .weather-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://www.transparenttextures.com/patterns/stardust.png');
+    opacity: 0.1;
 }
 
 h1, h2, h3, .brand-text {
@@ -316,6 +371,29 @@ nav a.active::after {
 
 .card:hover .card-footer svg {
     transform: translateX(5px);
+}
+
+/* Notes Section */
+.notes-section {
+    padding: 0 5% 100px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.hub-notes-area {
+    width: 100%;
+    min-height: 200px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+}
+
+.hub-notes-area::placeholder {
+    color: var(--text-muted);
 }
 
 /* Welcome Modal */

@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
+    <div class="weather-overlay">
+        <div class="cloud" style="top: 10%; width: 300px; height: 150px; animation-duration: 40s;"></div>
+        <div class="cloud" style="top: 40%; width: 450px; height: 200px; animation-duration: 65s; animation-delay: -10s;"></div>
+        <div class="cloud" style="top: 70%; width: 250px; height: 120px; animation-duration: 50s; animation-delay: -5s;"></div>
+    </div>
 
     <header>
         <a href="#" class="branding">
@@ -80,6 +85,15 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </div>
                 </a>
+            </div>
+        </section>
+
+        <section class="notes-section">
+            <div class="section-header">
+                <h2 data-tr="quickNotes">Quick Notes</h2>
+            </div>
+            <div class="card">
+                <textarea id="hub-notes" class="hub-notes-area" placeholder="Write any general thoughts or reminders here..." data-tr-placeholder="notesPlaceholder"></textarea>
             </div>
         </section>
     </main>
