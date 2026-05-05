@@ -1,58 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Privacy Guard ---
-    const checkPrivacy = () => {
-        const privatePages = ['health_dashboard.html', 'research_dashboard.html'];
-        const isPrivatePage = privatePages.some(page => window.location.pathname.includes(page));
-        
-        if (isPrivatePage) {
-            const isAuthenticated = localStorage.getItem('musHub_authenticated') === 'true';
-            if (!isAuthenticated) {
-                // Hide content immediately
-                const mainContent = document.querySelector('main') || document.body;
-                if (mainContent) mainContent.style.display = 'none';
-                
-                // Show Password Overlay
-                const overlay = document.createElement('div');
-                overlay.id = 'privacy-overlay';
-                overlay.className = 'privacy-overlay';
-                overlay.innerHTML = `
-                    <div class="privacy-card">
-                        <div class="privacy-icon">🔒</div>
-                        <h2>Private Access</h2>
-                        <p>This dashboard is restricted. Please enter your access code.</p>
-                        <div class="pin-input-group">
-                            <input type="password" id="access-code" placeholder="Enter Access Code" />
-                            <button id="unlock-btn">Unlock</button>
-                        </div>
-                        <p id="privacy-error" class="error-text"></p>
-                        <a href="index.html" class="back-link">← Back to Home</a>
-                    </div>
-                `;
-                document.body.appendChild(overlay);
-
-                const unlockBtn = document.getElementById('unlock-btn');
-                const codeInput = document.getElementById('access-code');
-                const errorText = document.getElementById('privacy-error');
-
-                const handleUnlock = () => {
-                    const code = codeInput.value;
-                    if (code === 'Mus2026') { // Default password
-                        localStorage.setItem('musHub_authenticated', 'true');
-                        window.location.reload();
-                    } else {
-                        errorText.textContent = 'Invalid access code. Please try again.';
-                        codeInput.value = '';
-                        codeInput.focus();
-                    }
-                };
-
-                unlockBtn.addEventListener('click', handleUnlock);
-                codeInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUnlock(); });
-            }
-        }
-    };
-    checkPrivacy();
-
     // --- Shared Component Injection (Weather, Solat, Clock & Controls) ---
     const injectSharedComponents = () => {
         // 1. Weather Overlay
@@ -89,35 +35,55 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.appendChild(card);
         }
 
-        // 3. Header Controls & Widget Injection
+        // 3. Header Controls (View, Lang, Solat)
         const headerControls = document.querySelector('.header-controls');
         if (headerControls) {
-            // Clock Widget
-            if (!document.getElementById('clock-widget')) {
-                const clock = document.createElement('div');
-                clock.id = 'clock-widget';
-                clock.className = 'control-btn clock-widget';
-                clock.innerHTML = '<span>🕒</span> --:--';
-                headerControls.prepend(clock);
-            }
-
-            // Solat Widget
+            // Ensure View and Lang are there (they are usually in HTML, but we check)
+            
+            // Solat Widget (at the right beside language)
             if (!document.getElementById('solat-widget')) {
                 const solat = document.createElement('div');
                 solat.id = 'solat-widget';
                 solat.className = 'solat-widget';
                 solat.innerHTML = `<span>🕌</span> <div class="solat-info"><span class="solat-label">Solat</span><span id="next-prayer">--:--</span></div>`;
-                headerControls.prepend(solat);
+                headerControls.appendChild(solat); // Append at the end (right side)
+            }
+        }
+
+        // 4. Hero Widgets (Time and Temperature) - Below Greeting
+        const hero = document.querySelector('.hero');
+        const heroTitle = document.getElementById('hero-title');
+        if (hero && heroTitle) {
+            let widgetCont = document.getElementById('hero-widget-container');
+            if (!widgetCont) {
+                widgetCont = document.createElement('div');
+                widgetCont.id = 'hero-widget-container';
+                widgetCont.className = 'widget-container hero-widgets-bottom';
+                // Place it AFTER the hero title
+                heroTitle.after(widgetCont);
             }
 
-            // Weather Widget Button
-            if (!document.getElementById('weather-widget')) {
-                const weatherBtn = document.createElement('button');
-                weatherBtn.id = 'weather-widget';
-                weatherBtn.className = 'control-btn';
-                weatherBtn.innerHTML = '<span>☀️</span> --°C';
-                headerControls.appendChild(weatherBtn);
+            // Clock
+            if (!document.getElementById('clock-widget')) {
+                const clock = document.createElement('div');
+                clock.id = 'clock-widget';
+                clock.className = 'widget hero-clock';
+                clock.innerHTML = '🕒 --:--:--';
+                widgetCont.appendChild(clock);
             }
+
+            // Weather Widget (Temp)
+            if (!document.getElementById('weather-widget')) {
+                const weather = document.createElement('div');
+                weather.id = 'weather-widget';
+                weather.className = 'widget hero-weather';
+                weather.innerHTML = '<span>☀️</span> --°C';
+                widgetCont.appendChild(weather);
+            }
+            
+            // Remove any old containers if they exist (clean up duplicate logic)
+            const oldCont = hero.querySelector('.widget-container:not(#hero-widget-container)');
+            if (oldCont) oldCont.remove();
         }
     };
     injectSharedComponents();
@@ -385,8 +351,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const clock = document.getElementById('clock-widget');
         if (!clock) return;
         const now = new Date();
-        const timeStr = now.toLocaleTimeString(appLanguage === 'EN' ? 'en-US' : 'ms-MY', { hour: '2-digit', minute: '2-digit', hour12: true });
-        clock.innerHTML = `<span>🕒</span> ${timeStr}`;
+        const timeStr = now.toLocaleTimeString(appLanguage === 'EN' ? 'en-US' : 'ms-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        clock.innerHTML = `🕒 ${timeStr}`;
     }, 1000);
 
     const observer = new IntersectionObserver((entries) => {

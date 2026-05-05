@@ -424,32 +424,38 @@ nav a.active::after {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-top: 0.5rem;
+    justify-content: flex-end;
 }
 
-.solat-widget, .clock-widget, .control-btn {
+.solat-widget, .control-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 44px; /* Sufficient height for 2-line solat or 1-line others */
+    height: 40px;
     padding: 0 0.75rem;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: var(--text-main);
-    gap: 0.5rem;
+    gap: 0.4rem;
     white-space: nowrap;
-    transition: all 0.3s ease;
 }
 
 .solat-widget {
     background: rgba(20, 184, 166, 0.1);
     border-color: rgba(20, 184, 166, 0.2);
     color: var(--accent);
+}
+
+@media (max-width: 1024px) {
+    .header-controls {
+        justify-content: center;
+        gap: 0.4rem;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
 }
 
 .solat-info {
@@ -528,6 +534,11 @@ nav a.active::after {
     margin-bottom: 2rem;
 }
 
+.hero-widgets-bottom {
+    margin-top: 0.5rem;
+    margin-bottom: 2.5rem !important;
+}
+
 .widget {
     background: var(--card-bg);
     border: 1px solid var(--glass-border);
@@ -539,7 +550,14 @@ nav a.active::after {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+}
+
+.widget:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 5px 15px rgba(20, 184, 166, 0.2);
 }
 
 .hero h1 {
