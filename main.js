@@ -35,23 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.appendChild(card);
         }
 
-        // Solat Widget & Branding Restructure
-        const header = document.querySelector('header');
-        if (header && !document.querySelector('.branding-group')) {
-            const branding = header.querySelector('.branding');
-            if (branding) {
-                const group = document.createElement('div');
-                group.className = 'branding-group';
-                
-                const solat = document.createElement('div');
-                solat.id = 'solat-widget';
-                solat.className = 'solat-widget';
-                solat.innerHTML = `<span>🕌</span> <div class="solat-info"><span class="solat-label">Solat</span><span id="next-prayer">--:--</span></div>`;
-                
-                group.appendChild(solat);
-                branding.parentNode.insertBefore(group, branding);
-                group.appendChild(branding);
-            }
+        // Solat Widget Injection (Now in Header Controls)
+        const headerControls = document.querySelector('.header-controls');
+        if (headerControls && !document.getElementById('solat-widget')) {
+            const solat = document.createElement('div');
+            solat.id = 'solat-widget';
+            solat.className = 'solat-widget';
+            solat.innerHTML = `<span>🕌</span> <div class="solat-info"><span class="solat-label">Solat</span><span id="next-prayer">--:--</span></div>`;
+            
+            // Insert at the beginning of header controls
+            headerControls.prepend(solat);
         }
     };
     injectSharedComponents();
@@ -67,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewModeBtn = document.getElementById('view-mode-btn');
     const viewIcon = document.getElementById('view-icon');
     const hubNotes = document.getElementById('hub-notes');
-    const nextPrayerEl = document.getElementById('next-prayer');
 
     // State
     let appLanguage = localStorage.getItem('musHub_lang') || 'EN';
