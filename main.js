@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Elements
     const heroTitle = document.getElementById('hero-title');
     const heroDesc = document.getElementById('hero-desc');
     const welcomeOverlay = document.getElementById('welcome-overlay');
@@ -10,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewModeBtn = document.getElementById('view-mode-btn');
     const viewIcon = document.getElementById('view-icon');
     const hubNotes = document.getElementById('hub-notes');
+    const rainContainer = document.getElementById('rain-container');
+    const lightningFlash = document.getElementById('lightning-flash');
+    const weatherDetails = document.getElementById('weather-details');
 
     // State
     let appLanguage = localStorage.getItem('musHub_lang') || 'EN';
@@ -102,8 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hours >= 12 && hours < 18) greetingBase = t.greetings[1];
         else if (hours >= 18 || hours < 5) greetingBase = t.greetings[2];
         
-        const isAboutPage = window.location.pathname.includes('about.html');
         if (heroTitle) {
+            const isAboutPage = window.location.pathname.includes('about.html');
             if (isAboutPage) {
                 heroTitle.textContent = t.about;
             } else {
@@ -112,38 +116,137 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const toggleAppLanguage = () => {
-        appLanguage = appLanguage === 'EN' ? 'BM' : 'EN';
-        localStorage.setItem('musHub_lang', appLanguage);
-        applyTranslations();
-    };
-
-    const toggleViewMode = () => {
-        const isDesktop = document.body.classList.toggle('desktop-mode');
-        localStorage.setItem('musHub_view', isDesktop ? 'desktop' : 'mobile');
-        updateViewIcon();
-    };
-
-    const updateViewIcon = () => {
-        if (!viewIcon) return;
-        const isDesktop = document.body.classList.contains('desktop-mode');
-        if (isDesktop) {
-            viewIcon.innerHTML = `<rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line>`;
-        } else {
-            viewIcon.innerHTML = `<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line>`;
+    // --- Advanced Weather Engine ---
+    const initRain = () => {
+        if (!rainContainer) return;
+        rainContainer.innerHTML = '';
+        for (let i = 0; i < 100; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'rain-drop';
+            drop.style.left = Math.random() * 100 + '%';
+            drop.style.animationDelay = Math.random() * 2 + 's';
+            drop.style.animationDuration = 0.5 + Math.random() * 0.5 + 's';
+            rainContainer.appendChild(drop);
         }
     };
 
-    const updateWeatherBackground = (code) => {
-        document.body.classList.remove('weather-clear', 'weather-cloudy', 'weather-rain', 'weather-storm');
+    const triggerLightning = () => {
+        if (!lightningFlash) return;
+        if (document.body.classList.contains('weather-storm')) {
+            if (Math.random() > 0.95) {
+                lightningFlash.classList.add('lightning-flash');
+                setTimeout(() => lightningFlash.classList.remove('lightning-flash'), 200);
+            }
+        }
+    };
+    setInterval(triggerLightning, 3000);
+
+    const updateWeatherUI = (data) => {
+        const current = data.current_weather;
+        const code = current.weathercode;
+        const temp = Math.round(current.temperature);
+        
+        // Background Classes
+        document.body.classList.remove('weather-clear', 'weather-cloudy', 'weather-rain', 'weather-storm', 'is-night');
+        
+        // Day/Night detection
+        const hours = new Date().getHours();
+        if (hours >= 19 || hours < 6) document.body.classList.add('is-night');
+
+        let statusText = "Clear Sky";
         if (code === 0) document.body.classList.add('weather-clear');
-        else if (code >= 1 && code <= 3) document.body.classList.add('weather-cloudy');
-        else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) document.body.classList.add('weather-rain');
-        else if (code >= 95) document.body.classList.add('weather-storm');
-        else document.body.classList.add('weather-cloudy');
+        else if (code >= 1 && code <= 3) {
+            document.body.classList.add('weather-cloudy');
+            statusText = "Partly Cloudy";
+        }
+        else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
+            document.body.classList.add('weather-rain');
+            statusText = "Rainy";
+        }
+        else if (code >= 95) {
+            document.body.classList.add('weather-storm');
+            statusText = "Thunderstorm";
+        }
+        else {
+            document.body.classList.add('weather-cloudy');
+            statusText = "Overcast";
+        }
+
+        // Widgets
+        let icon = '☀️';
+        if (document.body.classList.contains('weather-cloudy')) icon = '☁️';
+        if (document.body.classList.contains('weather-rain')) icon = '🌧️';
+        if (document.body.classList.contains('weather-storm')) icon = '⚡';
+        
+        if (weatherWidget) weatherWidget.innerHTML = `<span>${icon}</span> ${temp}°C`;
+        
+        // Panel Details
+        const cityEl = document.getElementById('weather-city');
+        const tempLargeEl = document.getElementById('temp-large');
+        const conditionEl = document.getElementById('weather-condition');
+        const humidityEl = document.getElementById('val-humidity');
+        const windEl = document.getElementById('val-wind');
+        const feelsEl = document.getElementById('val-feels');
+
+        if (tempLargeEl) tempLargeEl.textContent = `${temp}°C`;
+        if (conditionEl) conditionEl.textContent = statusText;
+        if (humidityEl) humidityEl.textContent = `${data.hourly.relativehumidity_2m[0]}%`;
+        if (windEl) windEl.textContent = `${current.windspeed} km/h`;
+        if (feelsEl) feelsEl.textContent = `${Math.round(current.temperature + 2)}°C`; // Simulating feels like for humidity
+
+        // Forecast
+        const forecastStrip = document.getElementById('forecast-strip');
+        if (forecastStrip) {
+            forecastStrip.innerHTML = '';
+            for (let i = 1; i < 6; i++) {
+                const dayItem = document.createElement('div');
+                dayItem.className = 'forecast-item';
+                const dayTemp = Math.round(data.hourly.temperature_2m[i * 24]);
+                dayItem.innerHTML = `
+                    <span class="forecast-day">Day ${i}</span>
+                    <span class="forecast-temp">${dayTemp}°C</span>
+                `;
+                forecastStrip.appendChild(dayItem);
+            }
+        }
     };
 
-    // Initialize
+    const fetchWeather = async (lat, lon) => {
+        try {
+            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m`);
+            const data = await response.json();
+            updateWeatherUI(data);
+        } catch (error) {
+            console.error("Weather fetch failed", error);
+        }
+    };
+
+    // Location & Weather Init
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+            () => fetchWeather(3.139, 101.686) // Default KL
+        );
+    } else {
+        fetchWeather(3.139, 101.686);
+    }
+
+    initRain();
+
+    // Weather Panel Interactivity
+    if (weatherWidget && weatherDetails) {
+        weatherWidget.addEventListener('mouseenter', () => weatherDetails.classList.add('visible'));
+        weatherWidget.addEventListener('mouseleave', () => {
+            setTimeout(() => {
+                if (!weatherDetails.matches(':hover')) weatherDetails.classList.remove('visible');
+            }, 300);
+        });
+        weatherDetails.addEventListener('mouseleave', () => weatherDetails.classList.remove('visible'));
+    }
+
+    // --- End Weather Engine ---
+
+    // Initialize Other Features
     if (storedName) {
         updateGreeting(storedName);
         if (welcomeOverlay) welcomeOverlay.classList.add('hidden');
@@ -155,78 +258,50 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('desktop-mode');
     }
     
-    // Notes Persistence
     if (hubNotes) {
         hubNotes.value = localStorage.getItem('musHub_generalNotes') || "";
-        hubNotes.addEventListener('input', (e) => {
-            localStorage.setItem('musHub_generalNotes', e.target.value);
-        });
+        hubNotes.addEventListener('input', (e) => localStorage.setItem('musHub_generalNotes', e.target.value));
     }
 
-    updateViewIcon();
     applyTranslations();
 
     // Event Listeners
-    if (langToggleBtn) langToggleBtn.addEventListener('click', toggleAppLanguage);
-    if (viewModeBtn) viewModeBtn.addEventListener('click', toggleViewMode);
+    if (langToggleBtn) langToggleBtn.addEventListener('click', () => {
+        appLanguage = appLanguage === 'EN' ? 'BM' : 'EN';
+        localStorage.setItem('musHub_lang', appLanguage);
+        applyTranslations();
+    });
+
+    if (viewModeBtn) viewModeBtn.addEventListener('click', () => {
+        const isDesktop = document.body.classList.toggle('desktop-mode');
+        localStorage.setItem('musHub_view', isDesktop ? 'desktop' : 'mobile');
+        if (viewIcon) {
+            if (isDesktop) {
+                viewIcon.innerHTML = `<rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line>`;
+            } else {
+                viewIcon.innerHTML = `<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line>`;
+            }
+        }
+    });
 
     if (startBtn) {
         startBtn.addEventListener('click', () => {
             const name = nameInput.value.trim();
             if (name) {
                 localStorage.setItem('musHub_userName', name);
-                localStorage.setItem('userName', name);
                 updateGreeting(name);
                 if (welcomeOverlay) welcomeOverlay.classList.add('hidden');
-            } else {
-                nameInput.style.borderColor = '#ff4444';
-                setTimeout(() => nameInput.style.borderColor = '', 1000);
             }
         });
     }
 
-    if (nameInput) {
-        nameInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') startBtn.click();
-        });
-    }
-
-    // Clock Widget
-    const updateClock = () => {
+    // Clock
+    setInterval(() => {
         if (!clockWidget) return;
         const now = new Date();
         const timeStr = now.toLocaleTimeString(appLanguage === 'EN' ? 'en-US' : 'ms-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
         clockWidget.innerHTML = `<span>🕒</span> ${timeStr}`;
-    };
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // Weather Widget
-    const fetchWeather = async (lat, lon) => {
-        try {
-            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-            const data = await response.json();
-            const temp = Math.round(data.current_weather.temperature);
-            const code = data.current_weather.weathercode;
-            updateWeatherBackground(code);
-            let icon = '☀️';
-            if (code > 0) icon = '☁️';
-            if (code > 50) icon = '🌧️';
-            if (weatherWidget) weatherWidget.innerHTML = `<span>${icon}</span> ${temp}°C`;
-        } catch (error) {
-            if (weatherWidget) weatherWidget.innerHTML = `<span>☁️</span> 28°C`;
-            updateWeatherBackground(0);
-        }
-    };
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
-            () => fetchWeather(3.139, 101.686)
-        );
-    } else {
-        fetchWeather(3.139, 101.686);
-    }
+    }, 1000);
 
     // Entrance Animations
     const observer = new IntersectionObserver((entries) => {
@@ -244,48 +319,4 @@ document.addEventListener('DOMContentLoaded', () => {
         card.style.transition = `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s`;
         observer.observe(card);
     });
-
-    // Smooth Scroll & Navigation State
-    document.querySelectorAll('nav a').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            if (href.startsWith('#') || href.includes('#')) {
-                const targetId = href.split('#')[1] || 'hero';
-                const target = document.getElementById(targetId) || document.querySelector('.hero');
-                if (target && window.location.pathname.includes('index.html')) {
-                    e.preventDefault();
-                    target.scrollIntoView({ behavior: 'smooth' });
-                    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-                    this.classList.add('active');
-                }
-            }
-        });
-    });
-
-    // Scroll Spy (Only on index.html)
-    if (window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('MusAnalyticsHub/')) {
-        const scrollObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
-                    document.querySelectorAll('nav a').forEach(a => {
-                        const href = a.getAttribute('href');
-                        a.classList.remove('active');
-                        if (href === `#${id}`) {
-                            a.classList.add('active');
-                        } else if (id === 'hero' && (href === '#' || href === '#hero' || href === 'index.html')) {
-                            a.classList.add('active');
-                        }
-                    });
-                }
-            });
-        }, { threshold: 0.5 });
-
-        document.querySelectorAll('section[id]').forEach(section => scrollObserver.observe(section));
-        const heroSection = document.querySelector('.hero');
-        if (heroSection) {
-            heroSection.id = 'hero';
-            scrollObserver.observe(heroSection);
-        }
-    }
 });

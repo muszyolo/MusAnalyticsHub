@@ -9,9 +9,36 @@
 </head>
 <body class="weather-clear">
     <div class="weather-overlay">
+        <div id="rain-container" class="rain-overlay"></div>
+        <div id="lightning-flash" class="lightning-overlay"></div>
         <div class="cloud" style="top: 10%; width: 300px; height: 150px; animation-duration: 40s;"></div>
         <div class="cloud" style="top: 40%; width: 450px; height: 200px; animation-duration: 65s; animation-delay: -10s;"></div>
-        <div class="cloud" style="top: 70%; width: 250px; height: 120px; animation-duration: 50s; animation-delay: -5s;"></div>
+    </div>
+
+    <!-- Weather Details Panel (Expands on hover/click) -->
+    <div id="weather-details" class="weather-details-card">
+        <div class="weather-main-info">
+            <div class="weather-city" id="weather-city">Kuala Lumpur</div>
+            <div class="weather-temp-large" id="temp-large">--°C</div>
+            <div class="weather-condition" id="weather-condition">Loading...</div>
+        </div>
+        <div class="weather-stats-grid">
+            <div class="stat-item">
+                <span class="stat-label">Humidity</span>
+                <span class="stat-value" id="val-humidity">--%</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Wind</span>
+                <span class="stat-value" id="val-wind">-- km/h</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Feels Like</span>
+                <span class="stat-value" id="val-feels">--°C</span>
+            </div>
+        </div>
+        <div class="forecast-strip" id="forecast-strip">
+            <!-- Forecast items will be injected here -->
+        </div>
     </div>
 
     <header>

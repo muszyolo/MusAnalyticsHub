@@ -64,6 +64,11 @@ body.weather-storm {
     background-image: radial-gradient(circle at top right, rgba(139, 92, 246, 0.5), rgba(0, 0, 0, 0.8)), url('anime_bg.jpg');
 }
 
+/* Day/Night Adjustments */
+body.is-night {
+    filter: brightness(0.7) contrast(1.1) hue-rotate(-10deg);
+}
+
 /* Animated Weather Effects */
 .weather-overlay {
     position: fixed;
@@ -76,29 +81,138 @@ body.weather-storm {
     overflow: hidden;
 }
 
-.cloud {
+/* Rain Effect */
+.rain-overlay {
     position: absolute;
-    background: rgba(255, 255, 255, 0.05);
-    filter: blur(50px);
-    border-radius: 50%;
-    animation: moveClouds 60s linear infinite;
-}
-
-@keyframes moveClouds {
-    from { transform: translateX(-100%) translateY(0); }
-    to { transform: translateX(200%) translateY(20px); }
-}
-
-body:not(.weather-clear) .weather-overlay::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    background: url('https://www.transparenttextures.com/patterns/stardust.png');
-    opacity: 0.1;
+    opacity: 0;
+    transition: opacity 2s ease;
 }
+
+body.weather-rain .rain-overlay,
+body.weather-storm .rain-overlay {
+    opacity: 0.4;
+}
+
+.rain-drop {
+    position: absolute;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.4));
+    width: 2px;
+    height: 100px;
+    top: -100px;
+    animation: rainFall 0.8s linear infinite;
+}
+
+@keyframes rainFall {
+    to { transform: translateY(110vh); }
+}
+
+/* Lightning Effect */
+.lightning-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.lightning-flash {
+    animation: lightningFlash 0.2s ease-out;
+}
+
+@keyframes lightningFlash {
+    0% { opacity: 0; }
+    50% { opacity: 0.6; }
+    100% { opacity: 0; }
+}
+
+/* Weather Details Card */
+.weather-details-card {
+    position: fixed;
+    top: 90px;
+    right: 5%;
+    width: 300px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 1.5rem;
+    z-index: 1000;
+    color: white;
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.weather-details-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.weather-city {
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.weather-temp-large {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0.5rem 0;
+    font-family: 'Outfit', sans-serif;
+}
+
+.weather-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.forecast-strip {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.forecast-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 50px;
+    background: rgba(255,255,255,0.05);
+    padding: 0.75rem 0.5rem;
+    border-radius: 12px;
+}
+
+.forecast-day { font-size: 0.7rem; color: var(--text-muted); }
+.forecast-temp { font-size: 0.8rem; font-weight: 700; }
 
 h1, h2, h3, .brand-text {
     font-family: 'Outfit', sans-serif;
