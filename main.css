@@ -30,17 +30,16 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--bg-main);
-    background-image: linear-gradient(rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.8)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-color: #050505;
     color: var(--text-main);
     line-height: 1.6;
     overflow-x: hidden;
     min-height: 100vh;
-    transition: background 1.5s ease-in-out;
+    transition: background 2s ease-in-out;
     position: relative;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 main {
@@ -50,19 +49,19 @@ main {
 
 /* Weather Backgrounds (Overlaying the wallpaper) */
 body.weather-clear {
-    background-image: radial-gradient(circle at top right, rgba(20, 184, 166, 0.2), rgba(10, 10, 10, 0.9)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
+    background-image: radial-gradient(circle at top right, rgba(20, 184, 166, 0.4), rgba(5, 5, 5, 0.9)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
 }
 
 body.weather-cloudy {
-    background-image: radial-gradient(circle at top right, rgba(71, 85, 105, 0.3), rgba(10, 10, 10, 0.9)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
+    background-image: radial-gradient(circle at top right, rgba(148, 163, 184, 0.4), rgba(5, 5, 5, 0.9)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
 }
 
 body.weather-rain {
-    background-image: radial-gradient(circle at top right, rgba(30, 41, 59, 0.4), rgba(2, 6, 23, 0.95)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
+    background-image: radial-gradient(circle at top right, rgba(59, 130, 246, 0.5), rgba(2, 6, 23, 0.95)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
 }
 
 body.weather-storm {
-    background-image: radial-gradient(circle at top right, rgba(49, 46, 129, 0.5), rgba(2, 6, 23, 0.98)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
+    background-image: radial-gradient(circle at top right, rgba(139, 92, 246, 0.6), rgba(2, 6, 23, 1)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
 }
 
 /* Animated Weather Effects */
