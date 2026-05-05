@@ -14,10 +14,16 @@
             <span class="brand-mus">Mus</span><span class="brand-analytics">Analytics</span><span class="brand-hub">Hub</span>
         </a>
         <nav>
-            <a href="#" class="active">Home</a>
-            <a href="#modules" style="color: var(--accent);">Modules</a>
-            <a href="#">About Me</a>
+            <a href="#" class="active" data-tr="home">Home</a>
+            <a href="#modules" style="color: var(--accent);" data-tr="modules">Modules</a>
+            <a href="#" data-tr="about">About Me</a>
         </nav>
+        <div class="header-controls">
+            <button id="view-mode-btn" class="control-btn" title="Toggle Desktop/Mobile View">
+                <svg id="view-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            </button>
+            <button id="lang-toggle-btn" class="control-btn" style="font-weight: 800; border-color: var(--accent);">EN | BM</button>
+        </div>
     </header>
 
     <main>
@@ -26,13 +32,13 @@
                 <div id="clock-widget" class="widget">--:--:--</div>
                 <div id="weather-widget" class="widget">Loading weather...</div>
             </div>
-            <h1 id="hero-title">Elevate Your Growth</h1>
-            <p id="hero-desc">Streamlining research, language mastery, and personal health through data-driven insights.</p>
+            <h1 id="hero-title" data-tr="heroTitle">Elevate Your Growth</h1>
+            <p id="hero-desc" data-tr="heroDesc">Streamlining research, language mastery, and personal health through data-driven insights.</p>
         </section>
 
         <section id="modules" class="modules-section">
             <div class="section-header">
-                <h2>Active Modules</h2>
+                <h2 data-tr="activeModules">Active Modules</h2>
             </div>
 
             <div class="grid">
@@ -40,11 +46,11 @@
                 <a href="language_hub.html" class="card">
                     <div>
                         <div class="card-icon">🌐</div>
-                        <h3>Language Mastery Hub</h3>
-                        <p>Master multiple languages with structured 12-week roadmaps and AI-powered resources.</p>
+                        <h3 data-tr="langHubTitle">Language Mastery Hub</h3>
+                        <p data-tr="langHubDesc">Master multiple languages with structured 12-week roadmaps and AI-powered resources.</p>
                     </div>
                     <div class="card-footer">
-                        Explore Hub 
+                        <span data-tr="exploreHub">Explore Hub</span> 
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </div>
                 </a>
@@ -53,11 +59,11 @@
                 <a href="research_dashboard.html" class="card">
                     <div>
                         <div class="card-icon">📊</div>
-                        <h3>Research Plan Tracker</h3>
-                        <p>Track your academic journey, literature reviews, and thesis milestones in real-time.</p>
+                        <h3 data-tr="resTrackerTitle">Research Plan Tracker</h3>
+                        <p data-tr="resTrackerDesc">Track your academic journey, literature reviews, and thesis milestones in real-time.</p>
                     </div>
                     <div class="card-footer">
-                        View Research 
+                        <span data-tr="viewResearch">View Research</span> 
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </div>
                 </a>
@@ -66,11 +72,11 @@
                 <a href="health_dashboard.html" class="card">
                     <div>
                         <div class="card-icon">🍎</div>
-                        <h3>Health & Nutrition</h3>
-                        <p>Optimize your physical well-being with nutrition tracking and personalized exercise routines.</p>
+                        <h3 data-tr="healthTitle">Health & Nutrition</h3>
+                        <p data-tr="healthDesc">Optimize your physical well-being with nutrition tracking and personalized exercise routines.</p>
                     </div>
                     <div class="card-footer">
-                        Track Health 
+                        <span data-tr="trackHealth">Track Health</span> 
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </div>
                 </a>
@@ -85,12 +91,12 @@
     <!-- Welcome Modal -->
     <div id="welcome-overlay" class="welcome-overlay hidden">
         <div class="welcome-card">
-            <h2>Welcome to the Hub</h2>
-            <p>Please enter your name to personalize your experience.</p>
+            <h2 id="modal-title" data-tr="modalTitle">Welcome to the Hub</h2>
+            <p id="modal-desc" data-tr="modalDesc">Please enter your name to personalize your experience.</p>
             <div class="name-input-group">
                 <input type="text" id="user-name-input" class="name-input" placeholder="Your name..." autocomplete="off">
             </div>
-            <button id="start-btn" class="start-btn">Get Started</button>
+            <button id="start-btn" class="start-btn" data-tr="startBtn">Get Started</button>
         </div>
     </div>
 

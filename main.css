@@ -118,6 +118,38 @@ nav a.active::after {
     box-shadow: 0 0 10px var(--accent-glow);
 }
 
+.header-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.control-btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.control-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+#lang-toggle-btn {
+    width: auto;
+    padding: 0 1rem;
+    font-size: 0.8rem;
+}
+
 /* Hero Section */
 .hero {
     padding: 80px 5% 60px;
@@ -382,14 +414,56 @@ nav a.active::after {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2.5rem;
+@media (max-width: 992px) {
+    header {
+        height: auto;
+        padding: 1.5rem 5%;
+        flex-direction: column;
+        gap: 1.5rem;
     }
+    
     nav {
-        display: none; /* Add a mobile menu later if needed */
+        gap: 1rem;
     }
+
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+
     .grid {
         grid-template-columns: 1fr;
     }
+
+    .widget-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+}
+
+/* Desktop Mode Override */
+body.desktop-mode {
+    min-width: 1200px;
+    overflow-x: auto;
+}
+
+body.desktop-mode header {
+    flex-direction: row;
+    height: 70px;
+}
+
+body.desktop-mode nav {
+    display: flex;
+}
+
+body.desktop-mode .grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+body.desktop-mode .hero h1 {
+    font-size: 4rem;
+}
+
+body.desktop-mode .widget-container {
+    flex-direction: row;
 }
