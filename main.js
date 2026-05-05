@@ -1,4 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Component Injection ---
+    const injectWeatherElements = () => {
+        if (!document.getElementById('weather-details')) {
+            const card = document.createElement('div');
+            card.id = 'weather-details';
+            card.className = 'weather-details-card';
+            card.innerHTML = `
+                <div class="weather-main-info">
+                    <div class="weather-city" id="weather-city">Kuala Lumpur</div>
+                    <div class="weather-temp-large" id="temp-large">--°C</div>
+                    <div class="weather-condition" id="weather-condition">Loading...</div>
+                </div>
+                <div class="weather-stats-grid">
+                    <div class="stat-item"><span class="stat-label">Humidity</span><span class="stat-value" id="val-humidity">--%</span></div>
+                    <div class="stat-item"><span class="stat-label">Wind</span><span class="stat-value" id="val-wind">-- km/h</span></div>
+                    <div class="stat-item"><span class="stat-label">Feels Like</span><span class="stat-value" id="val-feels">--°C</span></div>
+                </div>
+                <div class="forecast-strip" id="forecast-strip"></div>
+            `;
+            document.body.appendChild(card);
+        }
+
+        if (!document.querySelector('.weather-overlay')) {
+            const overlay = document.createElement('div');
+            overlay.className = 'weather-overlay';
+            overlay.innerHTML = `
+                <div id="rain-container" class="rain-overlay"></div>
+                <div id="lightning-flash" class="lightning-overlay"></div>
+                <div class="cloud" style="top: 10%; width: 300px; height: 150px; animation-duration: 40s;"></div>
+                <div class="cloud" style="top: 40%; width: 450px; height: 200px; animation-duration: 65s; animation-delay: -10s;"></div>
+            `;
+            document.body.prepend(overlay);
+        }
+    };
+    injectWeatherElements();
+
     // Elements
     const heroTitle = document.getElementById('hero-title');
     const heroDesc = document.getElementById('hero-desc');
@@ -22,9 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const translations = {
         'EN': {
-            home: "Home",
-            modules: "Modules",
-            about: "About Me",
+            home: "Home", modules: "Modules", about: "About Me",
             heroTitle: "Elevate Your Growth",
             heroDesc: "Streamlining research, language mastery, and personal health through data-driven insights.",
             activeModules: "Active Modules",
@@ -54,9 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             greetings: ["Good Morning", "Good Afternoon", "Good Evening"]
         },
         'BM': {
-            home: "Utama",
-            modules: "Modul",
-            about: "Tentang Saya",
+            home: "Utama", modules: "Modul", about: "Tentang Saya",
             heroTitle: "Tingkatkan Pertumbuhan Anda",
             heroDesc: "Memudahkan penyelidikan, penguasaan bahasa, dan kesihatan peribadi melalui wawasan data.",
             activeModules: "Modul Aktif",
@@ -118,24 +150,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Advanced Weather Engine ---
     const initRain = () => {
-        if (!rainContainer) return;
-        rainContainer.innerHTML = '';
+        const rainCont = document.getElementById('rain-container');
+        if (!rainCont) return;
+        rainCont.innerHTML = '';
         for (let i = 0; i < 100; i++) {
             const drop = document.createElement('div');
             drop.className = 'rain-drop';
             drop.style.left = Math.random() * 100 + '%';
             drop.style.animationDelay = Math.random() * 2 + 's';
             drop.style.animationDuration = 0.5 + Math.random() * 0.5 + 's';
-            rainContainer.appendChild(drop);
+            rainCont.appendChild(drop);
         }
     };
 
     const triggerLightning = () => {
-        if (!lightningFlash) return;
+        const flash = document.getElementById('lightning-flash');
+        if (!flash) return;
         if (document.body.classList.contains('weather-storm')) {
             if (Math.random() > 0.95) {
-                lightningFlash.classList.add('lightning-flash');
-                setTimeout(() => lightningFlash.classList.remove('lightning-flash'), 200);
+                flash.classList.add('lightning-flash');
+                setTimeout(() => flash.classList.remove('lightning-flash'), 200);
             }
         }
     };
@@ -146,10 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const code = current.weathercode;
         const temp = Math.round(current.temperature);
         
-        // Background Classes
         document.body.classList.remove('weather-clear', 'weather-cloudy', 'weather-rain', 'weather-storm', 'is-night');
-        
-        // Day/Night detection
         const hours = new Date().getHours();
         if (hours >= 19 || hours < 6) document.body.classList.add('is-night');
 
@@ -172,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
             statusText = "Overcast";
         }
 
-        // Widgets
         let icon = '☀️';
         if (document.body.classList.contains('weather-cloudy')) icon = '☁️';
         if (document.body.classList.contains('weather-rain')) icon = '🌧️';
@@ -180,8 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (weatherWidget) weatherWidget.innerHTML = `<span>${icon}</span> ${temp}°C`;
         
-        // Panel Details
-        const cityEl = document.getElementById('weather-city');
         const tempLargeEl = document.getElementById('temp-large');
         const conditionEl = document.getElementById('weather-condition');
         const humidityEl = document.getElementById('val-humidity');
@@ -192,9 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (conditionEl) conditionEl.textContent = statusText;
         if (humidityEl) humidityEl.textContent = `${data.hourly.relativehumidity_2m[0]}%`;
         if (windEl) windEl.textContent = `${current.windspeed} km/h`;
-        if (feelsEl) feelsEl.textContent = `${Math.round(current.temperature + 2)}°C`; // Simulating feels like for humidity
+        if (feelsEl) feelsEl.textContent = `${Math.round(current.temperature + 2)}°C`;
 
-        // Forecast
         const forecastStrip = document.getElementById('forecast-strip');
         if (forecastStrip) {
             forecastStrip.innerHTML = '';
@@ -216,37 +243,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m`);
             const data = await response.json();
             updateWeatherUI(data);
-        } catch (error) {
-            console.error("Weather fetch failed", error);
-        }
+        } catch (error) { console.error("Weather fetch failed", error); }
     };
 
-    // Location & Weather Init
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
-            () => fetchWeather(3.139, 101.686) // Default KL
+            () => fetchWeather(3.139, 101.686)
         );
-    } else {
-        fetchWeather(3.139, 101.686);
-    }
+    } else { fetchWeather(3.139, 101.686); }
 
     initRain();
 
-    // Weather Panel Interactivity
     if (weatherWidget && weatherDetails) {
         weatherWidget.addEventListener('mouseenter', () => weatherDetails.classList.add('visible'));
         weatherWidget.addEventListener('mouseleave', () => {
-            setTimeout(() => {
-                if (!weatherDetails.matches(':hover')) weatherDetails.classList.remove('visible');
-            }, 300);
+            setTimeout(() => { if (!weatherDetails.matches(':hover')) weatherDetails.classList.remove('visible'); }, 300);
         });
         weatherDetails.addEventListener('mouseleave', () => weatherDetails.classList.remove('visible'));
+        
+        // Add click for mobile
+        weatherWidget.addEventListener('click', () => weatherDetails.classList.toggle('visible'));
     }
 
-    // --- End Weather Engine ---
-
-    // Initialize Other Features
+    // --- Persistence & Other Init ---
     if (storedName) {
         updateGreeting(storedName);
         if (welcomeOverlay) welcomeOverlay.classList.add('hidden');
@@ -254,9 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (welcomeOverlay) welcomeOverlay.classList.remove('hidden');
     }
 
-    if (localStorage.getItem('musHub_view') === 'desktop') {
-        document.body.classList.add('desktop-mode');
-    }
+    if (localStorage.getItem('musHub_view') === 'desktop') document.body.classList.add('desktop-mode');
     
     if (hubNotes) {
         hubNotes.value = localStorage.getItem('musHub_generalNotes') || "";
@@ -265,7 +283,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     applyTranslations();
 
-    // Event Listeners
     if (langToggleBtn) langToggleBtn.addEventListener('click', () => {
         appLanguage = appLanguage === 'EN' ? 'BM' : 'EN';
         localStorage.setItem('musHub_lang', appLanguage);
@@ -276,11 +293,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const isDesktop = document.body.classList.toggle('desktop-mode');
         localStorage.setItem('musHub_view', isDesktop ? 'desktop' : 'mobile');
         if (viewIcon) {
-            if (isDesktop) {
-                viewIcon.innerHTML = `<rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line>`;
-            } else {
-                viewIcon.innerHTML = `<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line>`;
-            }
+            if (isDesktop) viewIcon.innerHTML = `<rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line>`;
+            else viewIcon.innerHTML = `<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line>`;
         }
     });
 
@@ -295,7 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Clock
     setInterval(() => {
         if (!clockWidget) return;
         const now = new Date();
@@ -303,7 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
         clockWidget.innerHTML = `<span>🕒</span> ${timeStr}`;
     }, 1000);
 
-    // Entrance Animations
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
