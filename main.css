@@ -534,9 +534,9 @@ nav a.active::after {
     margin-bottom: 2rem;
 }
 
-.hero-widgets-bottom {
-    margin-top: 0.5rem;
-    margin-bottom: 2.5rem !important;
+.hero-widgets-top {
+    margin-top: 0;
+    margin-bottom: 1rem !important;
 }
 
 .widget {

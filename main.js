@@ -38,19 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Header Controls (View, Lang, Solat)
         const headerControls = document.querySelector('.header-controls');
         if (headerControls) {
-            // Ensure View and Lang are there (they are usually in HTML, but we check)
-            
             // Solat Widget (at the right beside language)
             if (!document.getElementById('solat-widget')) {
                 const solat = document.createElement('div');
                 solat.id = 'solat-widget';
                 solat.className = 'solat-widget';
                 solat.innerHTML = `<span>🕌</span> <div class="solat-info"><span class="solat-label">Solat</span><span id="next-prayer">--:--</span></div>`;
-                headerControls.appendChild(solat); // Append at the end (right side)
+                headerControls.appendChild(solat); 
             }
         }
 
-        // 4. Hero Widgets (Time and Temperature) - Below Greeting
+        // 4. Hero Widgets (Time and Temperature) - ABOVE Greeting
         const hero = document.querySelector('.hero');
         const heroTitle = document.getElementById('hero-title');
         if (hero && heroTitle) {
@@ -58,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!widgetCont) {
                 widgetCont = document.createElement('div');
                 widgetCont.id = 'hero-widget-container';
-                widgetCont.className = 'widget-container hero-widgets-bottom';
-                // Place it AFTER the hero title
-                heroTitle.after(widgetCont);
+                widgetCont.className = 'widget-container hero-widgets-top';
+                // Place it BEFORE the hero title
+                heroTitle.before(widgetCont);
             }
 
             // Clock
@@ -81,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 widgetCont.appendChild(weather);
             }
             
-            // Remove any old containers if they exist (clean up duplicate logic)
             const oldCont = hero.querySelector('.widget-container:not(#hero-widget-container)');
             if (oldCont) oldCont.remove();
         }
