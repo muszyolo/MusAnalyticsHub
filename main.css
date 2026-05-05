@@ -30,7 +30,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #050505;
+    background-color: #000;
     color: var(--text-main);
     line-height: 1.6;
     overflow-x: hidden;
@@ -47,21 +47,21 @@ main {
     z-index: 10;
 }
 
-/* Weather Backgrounds (Overlaying the wallpaper) */
+/* Weather Backgrounds (Anime Wallpaper with 40% visibility / 60% Overlay) */
 body.weather-clear {
-    background-image: radial-gradient(circle at top right, rgba(20, 184, 166, 0.4), rgba(5, 5, 5, 0.9)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
+    background-image: radial-gradient(circle at top right, rgba(20, 184, 166, 0.3), rgba(0, 0, 0, 0.6)), url('anime_bg.jpg');
 }
 
 body.weather-cloudy {
-    background-image: radial-gradient(circle at top right, rgba(148, 163, 184, 0.4), rgba(5, 5, 5, 0.9)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
+    background-image: radial-gradient(circle at top right, rgba(148, 163, 184, 0.3), rgba(0, 0, 0, 0.6)), url('anime_bg.jpg');
 }
 
 body.weather-rain {
-    background-image: radial-gradient(circle at top right, rgba(59, 130, 246, 0.5), rgba(2, 6, 23, 0.95)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
+    background-image: radial-gradient(circle at top right, rgba(59, 130, 246, 0.4), rgba(0, 0, 0, 0.7)), url('anime_bg.jpg');
 }
 
 body.weather-storm {
-    background-image: radial-gradient(circle at top right, rgba(139, 92, 246, 0.6), rgba(2, 6, 23, 1)), url('https://images.unsplash.com/photo-1518433278981-d1022198c98e?q=80&w=1920&auto=format&fit=crop');
+    background-image: radial-gradient(circle at top right, rgba(139, 92, 246, 0.5), rgba(0, 0, 0, 0.8)), url('anime_bg.jpg');
 }
 
 /* Animated Weather Effects */
