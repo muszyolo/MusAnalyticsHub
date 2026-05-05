@@ -1,4 +1,58 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Privacy Guard ---
+    const checkPrivacy = () => {
+        const privatePages = ['health_dashboard.html', 'research_dashboard.html'];
+        const isPrivatePage = privatePages.some(page => window.location.pathname.includes(page));
+        
+        if (isPrivatePage) {
+            const isAuthenticated = localStorage.getItem('musHub_authenticated') === 'true';
+            if (!isAuthenticated) {
+                // Hide content immediately
+                const mainContent = document.querySelector('main') || document.body;
+                if (mainContent) mainContent.style.display = 'none';
+                
+                // Show Password Overlay
+                const overlay = document.createElement('div');
+                overlay.id = 'privacy-overlay';
+                overlay.className = 'privacy-overlay';
+                overlay.innerHTML = `
+                    <div class="privacy-card">
+                        <div class="privacy-icon">🔒</div>
+                        <h2>Private Access</h2>
+                        <p>This dashboard is restricted. Please enter your access code.</p>
+                        <div class="pin-input-group">
+                            <input type="password" id="access-code" placeholder="Enter Access Code" />
+                            <button id="unlock-btn">Unlock</button>
+                        </div>
+                        <p id="privacy-error" class="error-text"></p>
+                        <a href="index.html" class="back-link">← Back to Home</a>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+
+                const unlockBtn = document.getElementById('unlock-btn');
+                const codeInput = document.getElementById('access-code');
+                const errorText = document.getElementById('privacy-error');
+
+                const handleUnlock = () => {
+                    const code = codeInput.value;
+                    if (code === 'Mus2026') { // Default password
+                        localStorage.setItem('musHub_authenticated', 'true');
+                        window.location.reload();
+                    } else {
+                        errorText.textContent = 'Invalid access code. Please try again.';
+                        codeInput.value = '';
+                        codeInput.focus();
+                    }
+                };
+
+                unlockBtn.addEventListener('click', handleUnlock);
+                codeInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUnlock(); });
+            }
+        }
+    };
+    checkPrivacy();
+
     // --- Shared Component Injection (Weather, Solat, Clock & Controls) ---
     const injectSharedComponents = () => {
         // 1. Weather Overlay
@@ -131,10 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
             languagesTitle: "Bahasa",
             languagesContent: "Aktif menguasai pelbagai bahasa termasuk Korea, Mandarin, dan Jepun untuk meluaskan ufuk akademik dan budaya.",
             connectTitle: "Hubungi Saya",
-            modalTitle: "Selamat Datang ke Hab",
-            modalDesc: "Sila masukkan nama anda untuk memperibadikan pengalaman anda.",
-            startBtn: "Mula Sekarang",
-            placeholder: "Nama anda...",
+            modalTitle: "Welcome to the Hub",
+            modalDesc: "Please enter your name to personalize your experience.",
+            startBtn: "Get Started",
+            placeholder: "Your name...",
             greetings: ["Selamat Pagi", "Selamat Tengah Hari", "Selamat Malam"]
         }
     };
