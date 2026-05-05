@@ -1,14 +1,48 @@
 document.addEventListener('DOMContentLoaded', () => {
     const heroTitle = document.getElementById('hero-title');
     const heroDesc = document.getElementById('hero-desc');
-    const hours = new Date().getHours();
-    
-    let greeting = 'Elevate Your Growth';
-    if (hours < 12) greeting = 'Good Morning, Mus';
-    else if (hours < 18) greeting = 'Good Afternoon, Mus';
-    else greeting = 'Good Evening, Mus';
-    
-    heroTitle.textContent = greeting;
+    const welcomeOverlay = document.getElementById('welcome-overlay');
+    const nameInput = document.getElementById('user-name-input');
+    const startBtn = document.getElementById('start-btn');
+
+    // Check for stored name
+    const storedName = localStorage.getItem('musHub_userName');
+
+    const updateGreeting = (name) => {
+        const hours = new Date().getHours();
+        let greetingBase = 'Elevate Your Growth';
+        if (hours < 12) greetingBase = 'Good Morning';
+        else if (hours < 18) greetingBase = 'Good Afternoon';
+        else greetingBase = 'Good Evening';
+        
+        heroTitle.textContent = `${greetingBase}, ${name || 'Mus'}`;
+    };
+
+    if (storedName) {
+        updateGreeting(storedName);
+        welcomeOverlay.classList.add('hidden');
+    } else {
+        welcomeOverlay.classList.remove('hidden');
+    }
+
+    // Handle name submission
+    const handleStart = () => {
+        const name = nameInput.value.trim();
+        if (name) {
+            localStorage.setItem('musHub_userName', name);
+            updateGreeting(name);
+            welcomeOverlay.classList.add('hidden');
+        } else {
+            // Shake effect or simple alert
+            nameInput.style.borderColor = '#ff4444';
+            setTimeout(() => nameInput.style.borderColor = '', 1000);
+        }
+    };
+
+    startBtn.addEventListener('click', handleStart);
+    nameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleStart();
+    });
 
     // Entrance Animations
     const observerOptions = {

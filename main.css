@@ -265,6 +265,101 @@ nav a.active::after {
     transform: translateX(5px);
 }
 
+/* Welcome Modal */
+.welcome-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    transition: var(--transition);
+}
+
+.welcome-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.welcome-card {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    padding: 3rem;
+    border-radius: 32px;
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.welcome-overlay:not(.hidden) .welcome-card {
+    transform: scale(1);
+}
+
+.welcome-card h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--brand-analytics);
+}
+
+.welcome-card p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.name-input-group {
+    margin-bottom: 2rem;
+}
+
+.name-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    color: white;
+    font-size: 1.1rem;
+    text-align: center;
+    transition: var(--transition);
+    font-family: inherit;
+}
+
+.name-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.start-btn {
+    width: 100%;
+    background: var(--accent);
+    color: black;
+    border: none;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.start-btn:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(20, 184, 166, 0.3);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero h1 {
