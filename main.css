@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
 
 :root {
     /* Brand Colors */
@@ -29,7 +29,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     background-color: #000;
     color: var(--text-main);
     line-height: 1.6;
@@ -167,7 +167,7 @@ body.weather-storm .rain-overlay {
     font-size: 4rem;
     font-weight: 800;
     margin: 0.5rem 0;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 .weather-stats-grid {
