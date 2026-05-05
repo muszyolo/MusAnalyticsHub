@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Header Controls (View, Lang, Solat)
         const headerControls = document.querySelector('.header-controls');
         if (headerControls) {
-            // Solat Widget (at the right beside language)
             if (!document.getElementById('solat-widget')) {
                 const solat = document.createElement('div');
                 solat.id = 'solat-widget';
@@ -52,35 +51,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const hero = document.querySelector('.hero');
         const heroTitle = document.getElementById('hero-title');
         if (hero && heroTitle) {
+            // Find or create the standard container
             let widgetCont = document.getElementById('hero-widget-container');
             if (!widgetCont) {
                 widgetCont = document.createElement('div');
                 widgetCont.id = 'hero-widget-container';
                 widgetCont.className = 'widget-container hero-widgets-top';
-                // Place it BEFORE the hero title
                 heroTitle.before(widgetCont);
             }
 
-            // Clock
-            if (!document.getElementById('clock-widget')) {
-                const clock = document.createElement('div');
+            // Move or Create Clock
+            let clock = document.getElementById('clock-widget');
+            if (!clock) {
+                clock = document.createElement('div');
                 clock.id = 'clock-widget';
                 clock.className = 'widget hero-clock';
                 clock.innerHTML = '🕒 --:--:--';
-                widgetCont.appendChild(clock);
+            } else {
+                clock.className = 'widget hero-clock'; // Force correct class
             }
+            widgetCont.appendChild(clock);
 
-            // Weather Widget (Temp)
-            if (!document.getElementById('weather-widget')) {
-                const weather = document.createElement('div');
+            // Move or Create Weather Widget (Temp)
+            let weather = document.getElementById('weather-widget');
+            if (!weather) {
+                weather = document.createElement('div');
                 weather.id = 'weather-widget';
                 weather.className = 'widget hero-weather';
                 weather.innerHTML = '<span>☀️</span> --°C';
-                widgetCont.appendChild(weather);
+            } else {
+                weather.className = 'widget hero-weather'; // Force correct class
             }
+            widgetCont.appendChild(weather);
             
-            const oldCont = hero.querySelector('.widget-container:not(#hero-widget-container)');
-            if (oldCont) oldCont.remove();
+            // Clean up any remaining empty old containers
+            document.querySelectorAll('.hero .widget-container').forEach(c => {
+                if (c.id !== 'hero-widget-container') c.remove();
+            });
         }
     };
     injectSharedComponents();
