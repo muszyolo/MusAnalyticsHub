@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const solat = document.createElement('div');
                 solat.id = 'solat-widget';
                 solat.className = 'solat-widget';
-                solat.innerHTML = `<span>🕌</span> <div style="display: flex; flex-direction: column;"><span class="solat-label">Solat</span><span id="next-prayer">--:--</span></div>`;
+                solat.innerHTML = `<span>🕌</span> <div class="solat-info"><span class="solat-label">Solat</span><span id="next-prayer">--:--</span></div>`;
                 
                 group.appendChild(solat);
                 branding.parentNode.insertBefore(group, branding);
