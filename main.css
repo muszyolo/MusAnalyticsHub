@@ -47,21 +47,21 @@ main {
     z-index: 10;
 }
 
-/* Weather Backgrounds (Anime Wallpaper with 40% visibility / 60% Overlay) */
+/* Weather Backgrounds (Dynamic Gradients) */
 body.weather-clear {
-    background-image: radial-gradient(circle at top right, rgba(20, 184, 166, 0.3), rgba(0, 0, 0, 0.6)), url('anime_bg.jpg');
+    background-image: radial-gradient(circle at top right, rgba(20, 184, 166, 0.4), rgba(0, 0, 0, 0.95));
 }
 
 body.weather-cloudy {
-    background-image: radial-gradient(circle at top right, rgba(148, 163, 184, 0.3), rgba(0, 0, 0, 0.6)), url('anime_bg.jpg');
+    background-image: radial-gradient(circle at top right, rgba(148, 163, 184, 0.4), rgba(0, 0, 0, 0.95));
 }
 
 body.weather-rain {
-    background-image: radial-gradient(circle at top right, rgba(59, 130, 246, 0.4), rgba(0, 0, 0, 0.7)), url('anime_bg.jpg');
+    background-image: radial-gradient(circle at top right, rgba(59, 130, 246, 0.5), rgba(0, 0, 0, 0.98));
 }
 
 body.weather-storm {
-    background-image: radial-gradient(circle at top right, rgba(139, 92, 246, 0.5), rgba(0, 0, 0, 0.8)), url('anime_bg.jpg');
+    background-image: radial-gradient(circle at top right, rgba(139, 92, 246, 0.6), rgba(0, 0, 0, 1));
 }
 
 /* Day/Night Adjustments */
