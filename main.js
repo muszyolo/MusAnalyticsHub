@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const welcomeOverlay = document.getElementById('welcome-overlay');
     const nameInput = document.getElementById('user-name-input');
     const startBtn = document.getElementById('start-btn');
+    const clockWidget = document.getElementById('clock-widget');
+    const weatherWidget = document.getElementById('weather-widget');
 
     // Check for stored name
     const storedName = localStorage.getItem('musHub_userName');
@@ -33,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateGreeting(name);
             welcomeOverlay.classList.add('hidden');
         } else {
-            // Shake effect or simple alert
             nameInput.style.borderColor = '#ff4444';
             setTimeout(() => nameInput.style.borderColor = '', 1000);
         }
@@ -44,11 +45,45 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') handleStart();
     });
 
-    // Entrance Animations
-    const observerOptions = {
-        threshold: 0.1
+    // Clock Widget
+    const updateClock = () => {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        clockWidget.innerHTML = `<span>🕒</span> ${timeStr}`;
+    };
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Weather Widget (Open-Meteo)
+    const fetchWeather = async (lat, lon) => {
+        try {
+            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+            const data = await response.json();
+            const temp = Math.round(data.current_weather.temperature);
+            const code = data.current_weather.weathercode;
+            
+            let icon = '☀️';
+            if (code > 0) icon = '☁️';
+            if (code > 50) icon = '🌧️';
+            
+            weatherWidget.innerHTML = `<span>${icon}</span> ${temp}°C`;
+        } catch (error) {
+            weatherWidget.innerHTML = `<span>☁️</span> 28°C`; // Fallback
+        }
     };
 
+    // Try Geolocation
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+            () => fetchWeather(3.139, 101.686) // Default to KL
+        );
+    } else {
+        fetchWeather(3.139, 101.686);
+    }
+
+    // Entrance Animations
+    const observerOptions = { threshold: 0.1 };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -65,15 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(card);
     });
 
-    // Smooth Scroll for anchor links
+    // Smooth Scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth'
-                });
+                target.scrollIntoView({ behavior: 'smooth' });
             }
         });
     });
